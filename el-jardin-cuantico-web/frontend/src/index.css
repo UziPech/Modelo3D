@@ -1,0 +1,200 @@
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #000000;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  /* Prevent scrollbars from HTML, let R3F handle it if needed or ScrollControls */
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  touch-action: none;
+}
+
+/* Scroll Sections */
+.scroll-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  pointer-events: none;
+  /* Let clicks pass through to 3D */
+}
+
+.hero-section {
+  align-items: flex-start;
+  padding-left: 5vw;
+}
+
+/* Hotspot Card Positioning */
+.hotspot-card {
+  pointer-events: auto;
+  position: absolute;
+
+  /* Light Glassmorphism Premium (Restored) */
+  background: rgba(255, 255, 255, 0.2);
+  /* Transparencia visible */
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+
+  /* Borde sutil pero definido */
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+
+  padding: 3em;
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.05);
+
+  /* Tipografía */
+  color: #000000;
+  max-width: 500px;
+  z-index: 100;
+
+  /* Transiciones suaves */
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Efecto de Borde Holográfico */
+  position: relative;
+  overflow: hidden;
+
+  /* Perspectiva manejada por Vanilla-Tilt */
+  /* transform-style: preserve-3d; */
+  /* perspective: 1000px; */
+}
+
+/* Pseudo-elemento para el brillo del borde */
+.hotspot-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.8),
+      transparent);
+  transition: 0.6s;
+  pointer-events: none;
+}
+
+.hotspot-card:hover::before {
+  left: 100%;
+}
+
+.hotspot-card:hover {
+  /* Efecto 3D y Agrandamiento manejado por Vanilla-Tilt ahora */
+  /* transform: scale(1.05) translateY(-10px) rotateX(5deg) rotateY(-5deg); -> REMOVED */
+
+  background: rgba(255, 255, 255, 0.3);
+  /* Más claro al hover */
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.15),
+    0 0 30px rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.hotspot-card h3 {
+  font-family: 'Playfair Display', serif;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(45deg, #000000, #444444);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Efecto Lupa en Texto */
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+
+.hotspot-card h3:hover {
+  transform: scale(1.1);
+  /* Agrandar título */
+}
+
+.hotspot-card p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #333333;
+
+  /* Efecto Lupa en Texto */
+  transition: transform 0.3s ease, color 0.3s ease;
+  transform-origin: left;
+}
+
+.hotspot-card p:hover {
+  transform: scale(1.05);
+  /* Agrandar párrafo ligeramente */
+  color: #000000;
+  /* Oscurecer para más contraste */
+}
+
+.center-right {
+  right: 10vw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.center-left {
+  left: 10vw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.bottom-center {
+  left: 50%;
+  bottom: 10vh;
+  transform: translateX(-50%);
+}
+
+/* Footer Image */
+.footer-image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 60vw;
+  max-height: 80vh;
+  object-fit: cover;
+  z-index: -1;
+  mask-image: linear-gradient(to left, black 50%, transparent);
+  -webkit-mask-image: linear-gradient(to left, black 50%, transparent);
+  transition: opacity 0.5s ease-out;
+  pointer-events: none;
+}
+
+/* Bottom Blur */
+.bottom-blur {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to top, #ffffff, transparent);
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.5s ease-out;
+}
