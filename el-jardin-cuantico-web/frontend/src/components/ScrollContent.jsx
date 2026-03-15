@@ -98,7 +98,7 @@ export default function ScrollContent() {
                         display: 'inline-block',
                         padding: '0.2em 0.5em',
                         borderRadius: '4px'
-                    }}>PROYECTO FLORE</p>
+                    }}>Portafolio - Website</p>
                     <h1 style={{
                         color: '#1a1a1a',
                         fontSize: '5em',
@@ -107,7 +107,7 @@ export default function ScrollContent() {
                         fontWeight: '800',
                         textTransform: 'uppercase'
                     }}>
-                        POTENCIANDO<br />EL PROGRESO<br />ARTÍSTICO
+                        DEVELOPER<br />UZIEL ISAAC<br />PECH BALAM
                     </h1>
                     <p style={{
                         color: '#555',
