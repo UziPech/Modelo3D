@@ -34,14 +34,17 @@ const Marquee = () => {
     const track = trackRef.current;
     if (!track) return;
 
-    // Calculamos el ancho de UN set de elementos
-    const totalWidth = track.scrollWidth / 3;
+    // Asegurar que el layout esté listo antes de medir
+    requestAnimationFrame(() => {
+      // Calculamos el ancho exacto del contenido original (1 tercio del total)
+      const totalWidth = track.scrollWidth / 3;
 
-    gsap.to(track, {
-      x: -totalWidth,
-      duration: 15,
-      ease: 'none',
-      repeat: -1,
+      gsap.to(track, {
+        x: -totalWidth,
+        duration: 20, // Un poco más lento para suavidad
+        ease: 'linear', // 'linear' es mejor que 'none' en versiones recientes, aunque son sinónimos
+        repeat: -1,
+      });
     });
   }, { scope: containerRef });
 

@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { useScroll } from '@react-three/drei';
 import { useHotspotState } from '../logic/useHotspotState';
 import VanillaTilt from 'vanilla-tilt';
-import Marquee from './Marquee';
 // import 'animate.css'; // REMOVED: Causing visibility conflicts
 
 // Componente Wrapper para Vanilla-Tilt
@@ -87,8 +86,8 @@ export default function ScrollContent() {
         <div className="content-wrapper" style={{ padding: '0 10vw' }}>
 
             {/* SECCIÓN 1: Hero Section (Título Principal) */}
-            <div className="scroll-section" style={{ alignItems: 'flex-start', justifyContent: 'center', position: 'relative' }}>
-                <div ref={heroRef} style={{ transition: 'opacity 0.5s', opacity: scroll.offset > 0.1 ? 0 : 1 }}>
+            <div className="scroll-section" style={{ alignItems: 'flex-start', justifyContent: 'center', position: 'relative', overflow: 'visible' }}>
+                <div ref={heroRef} style={{ transition: 'opacity 0.5s', opacity: Math.max(0, 1 - scroll.offset * 12) }}>
                     <p style={{
                         color: '#888',
                         fontSize: '1em',
@@ -99,7 +98,7 @@ export default function ScrollContent() {
                         display: 'inline-block',
                         padding: '0.2em 0.5em',
                         borderRadius: '4px'
-                    }}>Portafolio - Website</p>
+                    }}>UziPech-Website</p>
                     <h1 style={{
                         color: '#1a1a1a',
                         fontSize: '5em',
@@ -121,14 +120,10 @@ export default function ScrollContent() {
                     </p>
                 </div>
 
-                {/* SECCIÓN DEL CARRUSEL INFINITO (FLOTANTE) */}
-                <div style={{ position: 'absolute', bottom: '2rem', left: '-10vw', width: '100vw' }}>
-                    <Marquee />
-                </div>
             </div>
 
             {/* SECCIÓN 2: Hotspot 1 (Flores y Corona) - Aparece al llegar a la página 2 */}
-            <div className="scroll-section" style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
+            <div className="scroll-section" style={{ justifyContent: 'center', alignItems: 'flex-start', position: 'relative', overflow: 'visible' }}>
                 <Card data={getCardContent(1)} scrollOpacity={getSectionOpacity(2)} isActive={activeHotspotId === 1} />
             </div>
 

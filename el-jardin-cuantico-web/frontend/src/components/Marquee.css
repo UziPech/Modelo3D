@@ -7,13 +7,13 @@
   background-color: transparent;
   padding: 1rem 0;
   position: relative;
-  /* Ensure it captures space and looks cinematic */
 }
 
 .marquee-track {
   display: flex;
   white-space: nowrap;
-  width: fit-content;
+  width: max-content;
+  will-change: transform;
 }
 
 .marquee-card {
