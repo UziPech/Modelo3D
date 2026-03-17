@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useScroll } from '@react-three/drei';
 import { useHotspotState } from '../logic/useHotspotState';
 import VanillaTilt from 'vanilla-tilt';
+import Marquee from './Marquee';
 // import 'animate.css'; // REMOVED: Causing visibility conflicts
 
 // Componente Wrapper para Vanilla-Tilt
@@ -86,7 +87,7 @@ export default function ScrollContent() {
         <div className="content-wrapper" style={{ padding: '0 10vw' }}>
 
             {/* SECCIÓN 1: Hero Section (Título Principal) */}
-            <div className="scroll-section" style={{ alignItems: 'flex-start', justifyContent: 'center' }}>
+            <div className="scroll-section" style={{ alignItems: 'flex-start', justifyContent: 'center', position: 'relative' }}>
                 <div ref={heroRef} style={{ transition: 'opacity 0.5s', opacity: scroll.offset > 0.1 ? 0 : 1 }}>
                     <p style={{
                         color: '#888',
@@ -118,6 +119,11 @@ export default function ScrollContent() {
                     }}>
                         Nuestras innovadoras tecnologías de restauración digital allanan el camino para preservar la historia.
                     </p>
+                </div>
+
+                {/* SECCIÓN DEL CARRUSEL INFINITO (FLOTANTE) */}
+                <div style={{ position: 'absolute', bottom: '2rem', left: '-10vw', width: '100vw' }}>
+                    <Marquee />
                 </div>
             </div>
 

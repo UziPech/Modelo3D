@@ -1,0 +1,64 @@
+/* Marquee.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;700&display=swap');
+
+.marquee-container {
+  width: 100vw;
+  overflow: hidden;
+  background-color: transparent;
+  padding: 1rem 0;
+  position: relative;
+  /* Ensure it captures space and looks cinematic */
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.marquee-card {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 3.5rem;
+  min-width: max-content;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+  user-select: none;
+}
+
+/* Modalidad Par: Fondo Negro, Texto Blanco */
+.marquee-card.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.marquee-card.dark .icon {
+  color: #ffffff;
+}
+
+/* Modalidad Impar: Fondo Blanco, Texto Negro */
+.marquee-card.light {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  box-shadow: inset 0 0 0 1px #1a1a1a;
+  /* Borde interno sutil */
+}
+
+.marquee-card.light .icon {
+  color: #1a1a1a;
+}
+
+.marquee-icon {
+  margin-right: 1.5rem;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.marquee-text {
+  display: inline-block;
+}

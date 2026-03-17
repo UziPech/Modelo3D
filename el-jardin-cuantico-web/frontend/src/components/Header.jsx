@@ -16,7 +16,7 @@ export default function Header() {
             alignItems: 'center'
         }}>
             <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 300, letterSpacing: '0.1em' }}>
-                EL JARDÍN CUÁNTICO
+
             </h1>
             <nav style={{ pointerEvents: 'auto' }}>
                 <a href="#" style={{ color: 'white', textDecoration: 'none', marginLeft: '2rem' }}>About</a>
