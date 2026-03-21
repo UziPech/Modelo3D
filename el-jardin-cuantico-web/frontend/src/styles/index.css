@@ -2,6 +2,9 @@
   /* Fluid Typography System for seamless responsiveness */
   --font-primary: 'Inter', system-ui, sans-serif;
   --font-secondary: 'Playfair Display', serif;
+  --font-uziel: 'Bodoni Moda', serif;
+  --font-isaac: 'Yellowtail', cursive;
+  --font-pech: 'Bebas Neue', sans-serif;
   
   --text-hero: clamp(2.5rem, 8vw, 6rem);
   --text-h1: clamp(2rem, 5vw, 4rem);

@@ -103,14 +103,15 @@ export default function ScrollContent() {
                         }}>DEVELOPER</span>
                         <div style={{ fontSize: '5.35vw', fontWeight: '900', lineHeight: '0.8', transform: 'scaleX(1.05)', transformOrigin: 'left' }}>
                             <span style={{
-                                backgroundImage: 'linear-gradient(to top, #000000ff, #ffffffff)',
+                                fontFamily: 'var(--font-uziel)',
+                                backgroundImage: 'linear-gradient(to top, #333333, #ffffff)',
                                 WebkitBackgroundClip: 'text',
                                 backgroundClip: 'text',
                                 color: 'transparent',
                                 display: 'inline-block'
-                            }}>UZIEL</span> <span style={{ fontStyle: 'italic', fontFamily: 'var(--font-secondary)', fontWeight: '600', color: '#1a1a1a' }}>ISAAC</span>
+                            }}>UZIEL</span> <span style={{ fontFamily: 'var(--font-isaac)', fontSize: '1.4em', fontWeight: 'normal', color: '#1a1a1a', verticalAlign: 'middle', marginLeft: '0.2vw' }}>ISAAC</span>
                         </div>
-                        <div style={{ fontSize: '6.42vw', fontWeight: '900', lineHeight: '0.8', color: '#020202ff', transform: 'scaleX(1.05)', transformOrigin: 'left', marginTop: '1vw' }}>
+                        <div style={{ fontFamily: 'var(--font-pech)', fontSize: '6.42vw', fontWeight: 'normal', lineHeight: '0.8', color: '#020202ff', transform: 'scaleX(1.05)', transformOrigin: 'left', marginTop: '1vw' }}>
                             PECH BALAM
                         </div>
                     </h1>
