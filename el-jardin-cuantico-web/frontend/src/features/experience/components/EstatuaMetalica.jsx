@@ -9,23 +9,21 @@ export default function EstatuaMetalica({ onHotspotClick, HOTSPOT_DATA }) {
   const modelRef = useRef();
 
   useEffect(() => {
-    console.log("GLTF Loaded:", gltf);
-  }, [gltf]);
-
-  // 1. Aplicar el material metálico a todas las mallas
-  gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      // MeshStandardMaterial soporta metalness y opacity para el fade
-      child.material = new THREE.MeshStandardMaterial({
-        color: '#aaaaaa',
-        metalness: 1.0,
-        roughness: 0.2,
-        transparent: true,      // ¡Crucial para el efecto de difuminado!
-        opacity: 1.0,           // Empezamos opaco
-        side: THREE.DoubleSide, // Asegurar que se vea por ambos lados
+    if (gltf.scene) {
+      gltf.scene.traverse((child) => {
+        if (child.isMesh) {
+          child.material = new THREE.MeshStandardMaterial({
+            color: '#aaaaaa',
+            metalness: 1.0,
+            roughness: 0.2,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide,
+          });
+        }
       });
     }
-  });
+  }, [gltf]);
 
   return (
     <group ref={modelRef}>

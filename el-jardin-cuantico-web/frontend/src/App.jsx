@@ -70,6 +70,8 @@ export default function App() {
 
       {/* CAPA 1: Canvas 3D (estatua) + HTML overlay (tarjetas) */}
       <Canvas
+        legacy={true}
+        gl={{ legacy: true }}
         camera={{ position: [-4, 0, 8], fov: 40 }}
         style={{ position: 'absolute', top: 0, left: 0, zIndex: 1, background: 'transparent' }}
       >

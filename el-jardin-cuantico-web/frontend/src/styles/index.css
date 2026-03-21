@@ -1,5 +1,22 @@
 :root {
-  font-family: 'Inter', system-ui, sans-serif;
+  /* Fluid Typography System for seamless responsiveness */
+  --font-primary: 'Inter', system-ui, sans-serif;
+  --font-secondary: 'Playfair Display', serif;
+  
+  --text-hero: clamp(2.5rem, 8vw, 6rem);
+  --text-h1: clamp(2rem, 5vw, 4rem);
+  --text-h2: clamp(1.5rem, 4vw, 3rem);
+  --text-h3: clamp(1.25rem, 3vw, 2.5rem);
+  --text-body: clamp(1rem, 1.5vw, 1.125rem);
+  --text-small: clamp(0.75rem, 1vw, 0.875rem);
+  
+  /* Modular Spacing */
+  --spacing-sm: clamp(0.5rem, 1vw, 1rem);
+  --spacing-md: clamp(1rem, 2vw, 2rem);
+  --spacing-lg: clamp(1.5rem, 4vw, 3rem);
+  --spacing-xl: clamp(3rem, 8vw, 6rem);
+
+  font-family: var(--font-primary);
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
@@ -29,7 +46,62 @@ canvas {
   touch-action: none;
 }
 
+/* Header Adjustments */
+.main-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  z-index: 10;
+  pointer-events: none;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.nav-links {
+  pointer-events: auto;
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.nav-link {
+  font-family: var(--font-primary);
+  color: white;
+  text-decoration: none;
+  font-size: var(--text-small);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity 0.3s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .main-header {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
+  }
+}
+
 /* Scroll Sections */
+.content-wrapper {
+  padding: 0 10vw;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+      padding: 0 5vw;
+  }
+}
+
 .scroll-section {
   height: 100vh;
   display: flex;
@@ -43,6 +115,66 @@ canvas {
 .hero-section {
   align-items: flex-start;
   padding-left: 5vw;
+}
+
+.hero-text-wrapper {
+  margin-left: -vw;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding-left: 0;
+    align-items: center !important;
+    text-align: center;
+  }
+  
+  .hero-text-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* Typographic Classes for Hero */
+.hero-badge {
+  font-family: var(--font-primary);
+  color: #888;
+  font-size: var(--text-small);
+  margin: 0 0 var(--spacing-sm) 0;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  background: #e0e0e0;
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: var(--font-primary);
+  color: #1a1a1a;
+  font-size: var(--text-hero);
+  margin: 0;
+  line-height: 0.9;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-family: var(--font-primary);
+  color: #555;
+  font-size: var(--text-body);
+  max-width: 500px;
+  margin-top: var(--spacing-md);
+  line-height: 1.5;
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+
+@media (max-width: 768px) {
+  .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* Hotspot Card Positioning */
@@ -60,26 +192,21 @@ canvas {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 
-  padding: 3em;
+  padding: var(--spacing-lg);
   box-shadow:
     0 15px 35px rgba(0, 0, 0, 0.1),
     0 5px 15px rgba(0, 0, 0, 0.05);
 
   /* Tipografía */
   color: #000000;
-  max-width: 500px;
+  max-width: min(500px, 90vw); /* Ensure it fits on mobile */
   z-index: 100;
 
   /* Transiciones suaves */
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   /* Efecto de Borde Holográfico */
-  position: relative;
   overflow: hidden;
-
-  /* Perspectiva manejada por Vanilla-Tilt */
-  /* transform-style: preserve-3d; */
-  /* perspective: 1000px; */
 }
 
 /* Pseudo-elemento para el brillo del borde */
@@ -103,9 +230,6 @@ canvas {
 }
 
 .hotspot-card:hover {
-  /* Efecto 3D y Agrandamiento manejado por Vanilla-Tilt ahora */
-  /* transform: scale(1.05) translateY(-10px) rotateX(5deg) rotateY(-5deg); -> REMOVED */
-
   background: rgba(255, 255, 255, 0.3);
   /* Más claro al hover */
   box-shadow:
@@ -115,10 +239,10 @@ canvas {
 }
 
 .hotspot-card h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-secondary);
+  font-size: var(--text-h3);
   margin-top: 0;
-  margin-bottom: 0.5em;
-  font-size: 2em;
+  margin-bottom: var(--spacing-sm);
   font-weight: 700;
   letter-spacing: -0.02em;
   background: linear-gradient(45deg, #000000, #444444);
@@ -132,14 +256,15 @@ canvas {
 }
 
 .hotspot-card h3:hover {
-  transform: scale(1.1);
-  /* Agrandar título */
+  transform: scale(1.05); /* Lupa sutil, muy elegante */
 }
 
 .hotspot-card p {
-  font-size: 1.1em;
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
   line-height: 1.6;
   color: #333333;
+  margin: 0;
 
   /* Efecto Lupa en Texto */
   transition: transform 0.3s ease, color 0.3s ease;
@@ -147,10 +272,8 @@ canvas {
 }
 
 .hotspot-card p:hover {
-  transform: scale(1.05);
-  /* Agrandar párrafo ligeramente */
+  transform: scale(1.02); /* Escala más refinada */
   color: #000000;
-  /* Oscurecer para más contraste */
 }
 
 .center-right {
@@ -171,6 +294,20 @@ canvas {
   transform: translateX(-50%);
 }
 
+/* Mobile Layout adjustments for hotpot cards */
+@media (max-width: 768px) {
+  .center-right, .center-left, .bottom-center {
+    position: relative;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    margin: 0 auto;
+    margin-top: 40vh; /* Pushes cards to lower half where model usually is less intrusive */
+  }
+}
+
 /* Footer Image */
 .footer-image {
   position: absolute;
@@ -186,13 +323,21 @@ canvas {
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  .footer-image {
+    width: 100vw;
+    mask-image: linear-gradient(to top, black 30%, transparent);
+    -webkit-mask-image: linear-gradient(to top, black 30%, transparent);
+  }
+}
+
 /* Bottom Blur */
 .bottom-blur {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 150px;
+  height: 15vh;
   background: linear-gradient(to top, #ffffff, transparent);
   pointer-events: none;
   z-index: 10;

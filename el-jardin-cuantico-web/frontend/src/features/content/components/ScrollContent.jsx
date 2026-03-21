@@ -86,40 +86,38 @@ export default function ScrollContent() {
         <div className="content-wrapper" style={{ padding: '0 10vw' }}>
 
             {/* SECCIÓN 1: Hero Section (Título Principal) */}
-            <div className="scroll-section" style={{ alignItems: 'flex-start', justifyContent: 'center', position: 'relative', overflow: 'visible' }}>
-                <div ref={heroRef} style={{ transition: 'opacity 0.5s', opacity: Math.max(0, 1 - scroll.offset * 12) }}>
-                    <p style={{
-                        color: '#888',
-                        fontSize: '1em',
-                        margin: '0 0 0.5em 0',
-                        letterSpacing: '0.1em',
-                        fontWeight: '600',
-                        background: '#e0e0e0',
-                        display: 'inline-block',
-                        padding: '0.2em 0.5em',
-                        borderRadius: '4px'
-                    }}>UziPech-Website</p>
-                    <h1 style={{
-                        color: '#1a1a1a',
-                        fontSize: '5em',
-                        margin: '0',
-                        lineHeight: '0.9',
-                        fontWeight: '800',
-                        textTransform: 'uppercase'
-                    }}>
-                        DEVELOPER<br />UZIEL ISAAC<br />PECH BALAM
+            <div className="scroll-section hero-section" style={{ position: 'relative', overflow: 'visible' }}>
+                <div ref={heroRef} className="hero-text-wrapper" style={{ transition: 'opacity 0.5s', opacity: Math.max(0, 1 - scroll.offset * 12), marginLeft: '-2vw' }}>
+                    <p className="hero-badge" style={{ display: 'none' }}>UziPech-Website</p>
+                    <h1 className="hero-title" style={{ margin: 0 }}>
+                        <span style={{
+                            background: '#000',
+                            color: '#fff',
+                            padding: '4px 12px',
+                            fontSize: '0.25em',
+                            borderRadius: '4px',
+                            display: 'inline-block',
+                            verticalAlign: 'middle',
+                            marginBottom: '20px',
+                            letterSpacing: '2px'
+                        }}>DEVELOPER</span>
+                        <div style={{ fontSize: '5.35vw', fontWeight: '900', lineHeight: '0.8', transform: 'scaleX(1.05)', transformOrigin: 'left' }}>
+                            <span style={{
+                                backgroundImage: 'linear-gradient(to top, #000000ff, #ffffffff)',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                color: 'transparent',
+                                display: 'inline-block'
+                            }}>UZIEL</span> <span style={{ fontStyle: 'italic', fontFamily: 'var(--font-secondary)', fontWeight: '600', color: '#1a1a1a' }}>ISAAC</span>
+                        </div>
+                        <div style={{ fontSize: '6.42vw', fontWeight: '900', lineHeight: '0.8', color: '#020202ff', transform: 'scaleX(1.05)', transformOrigin: 'left', marginTop: '1vw' }}>
+                            PECH BALAM
+                        </div>
                     </h1>
-                    <p style={{
-                        color: '#555',
-                        fontSize: '1.2em',
-                        maxWidth: '500px',
-                        marginTop: '1.5em',
-                        lineHeight: '1.4'
-                    }}>
+                    <p className="hero-subtitle" style={{ marginTop: '30px', color: '#444', maxWidth: '400px' }}>
                         Nuestras innovadoras tecnologías de restauración digital allanan el camino para preservar la historia.
                     </p>
                 </div>
-
             </div>
 
             {/* SECCIÓN 2: Hotspot 1 (Flores y Corona) - Aparece al llegar a la página 2 */}
@@ -153,3 +151,4 @@ export default function ScrollContent() {
         </div>
     );
 }
+
