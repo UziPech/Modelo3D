@@ -11,7 +11,7 @@ import {
   SiNodedotjs
 } from 'react-icons/si';
 
-import './Marquee.css';
+import '../styles/Marquee.css';
 
 const Marquee = () => {
   const containerRef = useRef(null);

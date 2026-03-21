@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useScroll } from '@react-three/drei';
-import { useHotspotState } from '../logic/useHotspotState';
+import { useHotspotState } from '../../experience';
 import VanillaTilt from 'vanilla-tilt';
 // import 'animate.css'; // REMOVED: Causing visibility conflicts
 

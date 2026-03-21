@@ -2,11 +2,9 @@ import React, { Suspense, useRef, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { ScrollControls, Scroll, Sparkles } from '@react-three/drei';
 import { EffectComposer, Vignette } from '@react-three/postprocessing';
-import EstatuaAnimada from './models/EstatuaAnimada';
-import ScrollContent from './components/ScrollContent';
-import Header from './components/Header';
-import { ScrollBridge } from './components/SyncMarquee';
-import Marquee from './components/Marquee';
+import { EstatuaAnimada } from './features/experience';
+import { ScrollContent } from './features/content';
+import { Header, ScrollBridge, Marquee } from './features/layout';
 
 /**
  * BackgroundMarquee - Componente DOM puro que vive FUERA del Canvas.

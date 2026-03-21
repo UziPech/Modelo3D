@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import React, { useRef } from 'react';
 import * as THREE from 'three';
 import EstatuaMetalica from './EstatuaMetalica'; // Importar el componente base
-import { useHotspotState } from '../logic/useHotspotState'; // Importar la lógica
+import { useHotspotState } from '../hooks/useHotspotState'; // Importar la lógica
 
 /**
  * @function EstatuaAnimada
