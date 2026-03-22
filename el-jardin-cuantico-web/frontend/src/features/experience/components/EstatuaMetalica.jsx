@@ -27,7 +27,7 @@ export default function EstatuaMetalica() {
       new THREE.MeshStandardMaterial({
         color: '#aaaaaa',
         metalness: 1.0,
-        roughness: 0.2,
+        roughness: 0.4,
         transparent: true,
         opacity: 1.0,
         side: THREE.DoubleSide,
@@ -75,7 +75,7 @@ export default function EstatuaMetalica() {
       </Center>
 
       {/* Environment reflections */}
-      <Environment preset="studio" background={false} />
+      <Environment preset="night" background={false} />
     </group>
   );
 }

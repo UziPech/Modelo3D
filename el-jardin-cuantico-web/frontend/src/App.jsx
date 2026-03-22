@@ -2,7 +2,7 @@ import React, { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { ScrollControls, Scroll, Sparkles } from '@react-three/drei';
 import { EffectComposer, Vignette } from '@react-three/postprocessing';
-import { EstatuaAnimada } from './features/experience';
+import { EstatuaAnimada, MatterPill } from './features/experience';
 import { ScrollContent } from './features/content';
 import { Header, CurtainBackground, ScrollProxy } from './features/layout';
 
@@ -36,6 +36,9 @@ export default function App() {
       >
         <Suspense fallback={null}>
           <Sparkles count={50} scale={10} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
+
+          {/* Fixed 3D UI element */}
+          <MatterPill />
 
           <ScrollControls pages={4} damping={0.1}>
             {/* Scroll bridge: writes offset to progressRef for DOM consumption */}
