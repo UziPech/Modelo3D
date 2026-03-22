@@ -1,3 +1,4 @@
 export { default as Header } from './components/Header';
 export { default as Marquee } from './components/Marquee';
-export { ScrollBridge } from './components/SyncMarquee';
+export { default as CurtainBackground } from './components/CurtainBackground';
+export { default as ScrollProxy } from './components/ScrollProxy';
