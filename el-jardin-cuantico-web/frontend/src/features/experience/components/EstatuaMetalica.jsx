@@ -3,9 +3,9 @@ import * as THREE from 'three';
 import React, { useRef, useEffect } from 'react';
 
 // Componente que renderiza el modelo 'Flore' con el material metálico PBR.
-export default function EstatuaMetalica({ onHotspotClick, HOTSPOT_DATA }) {
+export default function EstatuaMetalica() {
   // Carga del modelo GLB (asegúrate que la ruta sea correcta)
-  const gltf = useGLTF('/assets/scene.gltf');
+  const gltf = useGLTF('/assets/scene-transformed.glb');
   const modelRef = useRef();
 
   useEffect(() => {
@@ -39,25 +39,6 @@ export default function EstatuaMetalica({ onHotspotClick, HOTSPOT_DATA }) {
         </Resize>
       </Center>
 
-      {/* 2. Hotspots: Añadir las esferas invisibles para detectar clics */}
-      {HOTSPOT_DATA && HOTSPOT_DATA.map((hotspot) => (
-        <mesh
-          key={hotspot.id}
-          position={hotspot.cameraTarget}
-          onClick={(e) => {
-            e.stopPropagation();
-            onHotspotClick(hotspot.id);
-          }}
-        >
-          <sphereGeometry args={[0.2, 32, 32]} />
-          <meshBasicMaterial
-            color={'#FFFFFF'}
-            transparent
-            opacity={0.0} // Completamente invisible
-          />
-        </mesh>
-      ))}
-
       {/* Iluminación de Entorno para reflejos */}
       <Environment preset="studio" background={false} />
     </group>
@@ -65,4 +46,4 @@ export default function EstatuaMetalica({ onHotspotClick, HOTSPOT_DATA }) {
 }
 
 // Para que R3F pre-cargue el modelo
-useGLTF.preload('/assets/scene.gltf');
+useGLTF.preload('/assets/scene-transformed.glb');
