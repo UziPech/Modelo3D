@@ -35,11 +35,11 @@ export default function ScrollContent() {
         gsap.from(chars, {
             y: 50,
             opacity: 0,
-            duration: 1.2,
-            stagger: 0.08,
-            ease: 'expo.out',
-            delay: 0.3,
-            clearProps: 'all',
+                duration: 1.2,
+                stagger: 0.08,
+                ease: 'expo.out',
+                delay: 0.3,
+                clearProps: 'all',
         });
     }, []);
 
