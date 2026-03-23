@@ -4,7 +4,7 @@
   --font-secondary: 'Playfair Display', serif;
   --font-uziel: 'Bodoni Moda', serif;
   --font-isaac: 'Yellowtail', cursive;
-  --font-pech: 'Bebas Neue', sans-serif;
+  --font-pech: 'Gravitas One', cursive;
   
   --text-hero: clamp(2.5rem, 8vw, 6rem);
   --text-h1: clamp(2rem, 5vw, 4rem);

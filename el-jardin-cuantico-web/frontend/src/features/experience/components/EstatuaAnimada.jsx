@@ -34,12 +34,12 @@ export default function EstatuaAnimada() {
 
         // Queremos que baje (Y disminuye) y se mueva a la derecha (X aumenta)
         groupRef.current.position.y = -2.5 - (scroll.offset * 1.5);
-        groupRef.current.position.x = 2.5 + (scroll.offset * 2.9); // Desplazamiento agresivo a la derecha
+        groupRef.current.position.x = 3.5 + (scroll.offset * 2.9); // Desplazamiento agresivo a la derecha
     });
 
     // Posición del modelo (Centrado en 0,0,0 para que OrbitControls funcione bien)
     // La cámara está desplazada en App.jsx para que se vea a la derecha.
-    const modelPosition = [4.0, -2.5, 0]; // Offset base mayor a la derecha
+    const modelPosition = [4.5, -2.5, 0]; // Offset base mayor a la derecha
 
     return (
         <group ref={groupRef} position={modelPosition}>

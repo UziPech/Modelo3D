@@ -85,21 +85,22 @@ export default function ScrollContent() {
                             marginBottom: '20px',
                             letterSpacing: '2px'
                         }}>DEVELOPER</span>
-                        <div ref={uzielRef} style={{ fontSize: '5.35vw', fontWeight: '900', lineHeight: '0.8', transform: 'scaleX(1.05)', transformOrigin: 'left' }}>
+                        <div ref={uzielRef} style={{ display: 'flex', alignItems: 'center', fontSize: '4.5vw', fontWeight: '900', lineHeight: '0.9', transformOrigin: 'left' }}>
                             <SplitChars
                                 text="UZIEL"
                                 style={{
                                     fontFamily: 'var(--font-uziel)',
-                                    backgroundImage: 'linear-gradient(to top, #333333, #ffffff)',
+                                    fontSize: '1.4em', // 10% larger than parent
+                                    backgroundImage: 'linear-gradient(to top, #111111 50%, #dddddd 100%)',
                                     WebkitBackgroundClip: 'text',
                                     backgroundClip: 'text',
                                     color: 'transparent',
-                                    letterSpacing: '-0.05em',
+                                    letterSpacing: '-0.02em',
                                 }}
                             />
-                            {' '}<span style={{ fontFamily: 'var(--font-isaac)', fontSize: '1.4em', fontWeight: 'normal', color: '#1a1a1a', verticalAlign: 'middle', marginLeft: '0.2vw' }}>ISAAC</span>
+                            <span style={{ fontFamily: 'var(--font-isaac)', fontSize: '1.4em', fontWeight: 'normal', color: '#1a1a1a', marginLeft: '2.5vw' }}>ISAAC</span>
                         </div>
-                        <div style={{ fontFamily: 'var(--font-pech)', fontSize: '6.42vw', fontWeight: 'normal', lineHeight: '0.8', color: '#020202ff', transform: 'scaleX(1.05)', transformOrigin: 'left', marginTop: '1vw' }}>
+                        <div style={{ fontFamily: 'var(--font-pech)', fontSize: '5.5vw', fontWeight: 'normal', lineHeight: '0.9', color: '#020202ff', transformOrigin: 'left', marginTop: '1vw', letterSpacing: '-0.02em' }}>
                             PECH BALAM
                         </div>
                     </h1>
