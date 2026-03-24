@@ -174,10 +174,11 @@ function MatterPillMesh() {
   // ── Position: fixed top-left in camera space ──
   const position = useMemo(() => {
     // Escalar dinámicamente también su anclaje a la izquierda, conservando márgenes consistentes
-    // Un margen un poco más cómodo que 0.3 para despegarlo ligeramente pero no aislarlo
-    const margin = 0.45 * responsiveScale;
-    const x = -viewport.width / 2 + (width / 2) + margin; 
-    const y = viewport.height / 2 - (height / 2) - margin; 
+    // Un margen más amplio para despegarlo del borde izquierdo y que no se corte
+    const marginX = 1.0 * responsiveScale; // Mayor margen horizontal para evitar corte
+    const marginY = 0.45 * responsiveScale; // Mantener margen vertical original
+    const x = -viewport.width / 2 + (width / 2) + marginX; 
+    const y = viewport.height / 2 - (height / 2) - marginY; 
     return [x, y, 0];
   }, [viewport.width, viewport.height, width, height, responsiveScale]);
 

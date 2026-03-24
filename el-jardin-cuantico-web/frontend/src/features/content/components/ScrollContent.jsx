@@ -26,45 +26,8 @@ export default function ScrollContent() {
     const heroRef = useRef();
     const uzielRef = useRef();
 
-    // SplitText entrance animation
-    useEffect(() => {
-        if (!uzielRef.current) return;
-        const chars = uzielRef.current.querySelectorAll('.split-char');
-        if (!chars.length) return;
-
-        gsap.from(chars, {
-            y: 50,
-            opacity: 0,
-                duration: 1.2,
-                stagger: 0.08,
-                ease: 'expo.out',
-                delay: 0.3,
-                clearProps: 'all',
-        });
-    }, []);
-
-    // Scroll-synced blur + opacity on hero wrapper via gsap.ticker (no re-renders)
-    useEffect(() => {
-        const hero = heroRef.current;
-        if (!hero) return;
-
-        const update = () => {
-            const offset = scroll.offset;
-            // Only apply scroll effects after user starts scrolling
-            if (offset < 0.02) {
-                hero.style.opacity = 1;
-                hero.style.filter = 'none';
-                return;
-            }
-            const opacity = Math.max(0, 1 - offset * 4);
-            const blur = offset * 10;
-            hero.style.opacity = opacity;
-            hero.style.filter = `blur(${blur}px)`;
-        };
-
-        gsap.ticker.add(update);
-        return () => gsap.ticker.remove(update);
-    }, [scroll]);
+    // Scroll-synced opacity on footer image and blur effect
+    // We remove the hero text blur and entrance animations as requested
 
     return (
         <div className="content-wrapper" style={{ padding: '0 10vw' }}>
@@ -72,7 +35,6 @@ export default function ScrollContent() {
             {/* SECCIÓN 1: Hero Section (Título Principal) */}
             <div className="scroll-section hero-section" style={{ position: 'relative', overflow: 'visible' }}>
                 <div ref={heroRef} className="hero-text-wrapper" style={{ marginLeft: '-2vw' }}>
-                    <p className="hero-badge" style={{ display: 'none' }}>UziPech-Website</p>
                     <h1 className="hero-title" style={{ margin: 0 }}>
                         <span style={{
                             background: '#000',
@@ -86,18 +48,17 @@ export default function ScrollContent() {
                             letterSpacing: '2px'
                         }}>DEVELOPER</span>
                         <div ref={uzielRef} style={{ display: 'flex', alignItems: 'center', fontSize: '4.5vw', fontWeight: '900', lineHeight: '0.9', transformOrigin: 'left' }}>
-                            <SplitChars
-                                text="UZIEL"
+                            <span
                                 style={{
                                     fontFamily: 'var(--font-uziel)',
                                     fontSize: '1.4em', // 10% larger than parent
-                                    backgroundImage: 'linear-gradient(to top, #111111 50%, #dddddd 100%)',
-                                    WebkitBackgroundClip: 'text',
-                                    backgroundClip: 'text',
-                                    color: 'transparent',
+                                    color: '#1a1a1a', // Solid color to eliminate perceived blur
                                     letterSpacing: '-0.02em',
+                                    display: 'inline-block'
                                 }}
-                            />
+                            >
+                                UZIEL
+                            </span>
                             <span style={{ fontFamily: 'var(--font-isaac)', fontSize: '1.4em', fontWeight: 'normal', color: '#1a1a1a', marginLeft: '2.5vw' }}>ISAAC</span>
                         </div>
                         <div style={{ fontFamily: 'var(--font-pech)', fontSize: '5.5vw', fontWeight: 'normal', lineHeight: '0.9', color: '#020202ff', transformOrigin: 'left', marginTop: '1vw', letterSpacing: '-0.02em' }}>
