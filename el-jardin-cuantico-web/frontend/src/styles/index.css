@@ -59,6 +59,38 @@ body {
   will-change: clip-path;
 }
 
+/* BackgroundText — massive typography behind all 3D layers */
+.background-text {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 8vw;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+  opacity: 0;
+}
+
+.background-text__heading {
+  font-family: var(--font-pech);
+  font-size: 7vw;
+  line-height: 0.85;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  padding-top: 10vh;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  word-wrap: break-word;
+  width: 90vw;
+}
+
 canvas {
   touch-action: none;
 }

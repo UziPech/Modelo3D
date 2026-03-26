@@ -102,26 +102,8 @@ export default function ScrollContent() {
                 </div>
             </div>
 
-            {/* SECCIÓN 2: Massive Typography */}
+            {/* SECCIÓN 2: Massive Typography (now handled by BackgroundText layer) */}
             <div className="scroll-section" style={{ justifyContent: 'center', alignItems: 'flex-start', position: 'relative', overflow: 'visible' }}>
-                <div style={{ marginLeft: '-2vw', zIndex: 10, mixBlendMode: 'difference' }}>
-                    <h2 style={{
-                        fontFamily: 'var(--font-pech)',
-                        fontSize: '7vw',
-                        lineHeight: '0.85',
-                        fontWeight: '900',
-                        color: '#fff',
-                        margin: 0,
-                        letterSpacing: '-0.02em',
-                        textTransform: 'uppercase',
-                        wordWrap: 'break-word',
-                        width: '90vw'
-                    }}>
-                        INNOVA,<br/>
-                        CONSTRUYE CONMIGO,<br/>
-                        DESCUBRE EL VALOR.
-                    </h2>
-                </div>
             </div>
 
             {/* SECCIÓN 3: Espacio Hotspot 2 (Manto Drapeado) - Aparece al llegar a la página 3 */}
