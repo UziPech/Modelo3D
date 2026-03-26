@@ -1,18 +1,20 @@
 import React, { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { ScrollControls, Scroll, Sparkles } from '@react-three/drei';
+import { ScrollControls, Scroll, Sparkles, Environment, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Vignette } from '@react-three/postprocessing';
-import { EstatuaAnimada, MatterPill } from './features/experience';
+import { EstatuaAnimada, MatterPill, FloatingModels } from './features/experience';
 import { ScrollContent } from './features/content';
 import { Header, CurtainBackground, ScrollProxy } from './features/layout';
+import { LevaPanel } from './features/experience/components/DebugPanel';
 
 /**
  * App — Clean container.
  *
  * Layer stack (back → front):
  *   body (#000)             ← deep black reveal color
+ *   Canvas (z-index: -1)    ← Floating Models in the background
  *   CurtainBackground       ← white, z-index 0, animated clip-path
- *   Canvas                  ← z-index 1, transparent bg
+ *   Canvas (z-index: 1)     ← Foreground 3D scene (Statue) + HTML overlay
  *   Header                  ← z-index 10
  *
  * Scroll sync: ScrollProxy inside Canvas writes offset to progressRef.
@@ -23,13 +25,30 @@ export default function App() {
   const progressRef = useRef(0);
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', isolation: 'isolate' }}>
+      <LevaPanel />
       <Header />
+
+      {/* LAYER -1: Background 3D scene */}
+      <Canvas
+        camera={{ position: [-4, 0, 8], fov: 40 }}
+        style={{ position: 'absolute', top: 0, left: 0, zIndex: -1, background: 'transparent' }}
+      >
+        <Suspense fallback={null}>
+          <Environment preset="night" background={false} />
+          <OrbitControls target={[0, -2.5, 0]} enabled={false} />
+          {/* Modelos 3D flotantes colocados en el fondo */}
+          <FloatingModels />
+          <EffectComposer>
+            <Vignette eskil={false} offset={0.1} darkness={0.5} />
+          </EffectComposer>
+        </Suspense>
+      </Canvas>
 
       {/* LAYER 0: White curtain that clips away to reveal body black */}
       <CurtainBackground progressRef={progressRef} />
 
-      {/* LAYER 1: 3D scene + HTML overlay */}
+      {/* LAYER 1: Foreground 3D scene + HTML overlay */}
       <Canvas
         camera={{ position: [-4, 0, 8], fov: 40 }}
         style={{ position: 'absolute', top: 0, left: 0, zIndex: 1, background: 'transparent' }}

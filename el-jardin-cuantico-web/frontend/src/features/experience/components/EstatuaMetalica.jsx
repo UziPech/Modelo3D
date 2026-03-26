@@ -13,7 +13,7 @@ import React, { useRef, useEffect, useMemo } from 'react';
  * Uses useScroll() + useFrame() for interpolation — zero re-renders,
  * all mutations happen on the GPU-bound material uniforms.
  */
-export default function EstatuaMetalica() {
+export default function EstatuaMetalica({ debugScale = 6.5 }) {
   const gltf = useGLTF('/assets/scene-transformed.glb');
   const modelRef = useRef();
   const scroll = useScroll();
@@ -69,7 +69,7 @@ export default function EstatuaMetalica() {
   return (
     <group ref={modelRef}>
       <Center>
-        <Resize scale={6.5}>
+        <Resize scale={debugScale}>
           <primitive object={gltf.scene} />
         </Resize>
       </Center>
