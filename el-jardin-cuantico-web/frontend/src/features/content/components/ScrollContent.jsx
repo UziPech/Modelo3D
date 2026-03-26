@@ -55,7 +55,57 @@ export default function ScrollContent() {
 
             {/* SECCIÓN 1: Hero Section (Título Principal) */}
             <div className="scroll-section hero-section" style={{ position: 'relative', overflow: 'visible' }}>
-                <div ref={heroRef} className="hero-text-wrapper" style={{ marginLeft: '-2vw' }}>
+                <div ref={heroRef} className="hero-text-wrapper" style={{ marginLeft: '-2vw', position: 'relative' }}>
+
+                    {/* ── GHOST TEXT LAYER ──────────────────────────────────────────────
+                        Texto fantasma: mismas palabras, tipografía bold alternativa,
+                        color gris claro y escala mayor. Z-index negativo = queda detrás.
+                    ─────────────────────────────────────────────────────────────────── */}
+                    <div
+                        aria-hidden="true"
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '-1vw',
+                            transform: 'translateY(-50%)',
+                            zIndex: -1,
+                            pointerEvents: 'none',
+                            userSelect: 'none',
+                            lineHeight: 0.85,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.1em',
+                            maskImage: 'linear-gradient(to right, black 30%, transparent 58%)',
+                            WebkitMaskImage: 'linear-gradient(to right, black 30%, transparent 58%)',
+                        }}
+                    >
+                        {/* línea 1 ghost: UZIEL ISAAC */}
+                        <span style={{
+                            fontFamily: 'var(--font-pech)',
+                            fontSize: '9.2vw',
+                            fontWeight: '900',
+                            color: 'rgba(6, 5, 5, 0.07)',
+                            letterSpacing: '-0.03em',
+                            whiteSpace: 'nowrap',
+                            display: 'block',
+                        }}>
+                            UZIEL ISAAC
+                        </span>
+                        {/* línea 2 ghost: PECH BALAM */}
+                        <span style={{
+                            fontFamily: 'var(--font-pech)',
+                            fontSize: '9.2vw',
+                            fontWeight: '900',
+                            color: 'rgba(5, 5, 5, 0.07)',
+                            letterSpacing: '-0.03em',
+                            whiteSpace: 'nowrap',
+                            display: 'block',
+                        }}>
+                            PECH BALAM
+                        </span>
+                    </div>
+
+                    {/* ── TEXTO PRINCIPAL ─────────────────────────────────────────────── */}
                     <h1 className="hero-title" style={{ margin: 0 }}>
                         <span
                             ref={badgeRef}
