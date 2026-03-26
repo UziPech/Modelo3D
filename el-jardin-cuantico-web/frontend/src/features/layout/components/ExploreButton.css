@@ -1,0 +1,60 @@
+.explore-btn-container {
+  display: flex;
+  justify-content: flex-start;
+  pointer-events: auto; /* Needed because .background-text has pointer-events: none */
+}
+
+.explore-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 48px;
+  background-color: #ffffff;
+  border: 1px; /* border if you want, but the design typically doesn't need hard borders if background is white, but to match white base vs black text, let's add no border or very subtle one if white on black bg. The background of App is black. A white button on black background looks fine without a border. */
+  border-radius: 9999px;
+  color: #000000;
+  text-decoration: none;
+  font-family: var(--font-primary, sans-serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+}
+
+.explore-btn:focus {
+  outline: none;
+}
+
+.explore-btn .hover-circle {
+  position: absolute;
+  background-color: #000000;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.explore-btn .label-stack {
+  position: relative;
+  z-index: 2;
+  display: block;
+  height: 1.25em; /* Match line height */
+  overflow: hidden;
+  line-height: 1.25em;
+  text-align: center;
+}
+
+.explore-btn .pill-label {
+  display: block;
+}
+
+.explore-btn .pill-label-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: block;
+  color: #ffffff;
+}

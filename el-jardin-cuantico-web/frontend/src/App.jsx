@@ -5,6 +5,7 @@ import { EffectComposer, Vignette } from '@react-three/postprocessing';
 import { EstatuaAnimada, MatterPill, FloatingModels } from './features/experience';
 import { ScrollContent } from './features/content';
 import { Header, CurtainBackground, ScrollProxy, BackgroundText } from './features/layout';
+import HeroCTA from './features/layout/components/HeroCTA';
 import { LevaPanel } from './features/experience/components/DebugPanel';
 
 /**
@@ -28,6 +29,7 @@ export default function App() {
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', isolation: 'isolate' }}>
       <LevaPanel />
       <Header />
+      <HeroCTA progressRef={progressRef} />
 
       {/* LAYER -2: Background text (behind all 3D) */}
       <BackgroundText progressRef={progressRef} />
