@@ -59,10 +59,10 @@ export default function App() {
         <Suspense fallback={null}>
           <Sparkles count={50} scale={10} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
 
-          {/* Fixed 3D UI element */}
-          <MatterPill />
-
           <ScrollControls pages={4} damping={0.1}>
+            {/* Fixed 3D UI element that now scrolls away */}
+            <MatterPill />
+
             {/* Scroll bridge: writes offset to progressRef for DOM consumption */}
             <ScrollProxy progressRef={progressRef} />
 

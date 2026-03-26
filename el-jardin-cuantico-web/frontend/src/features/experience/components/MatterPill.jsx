@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useState, useCallback } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Hud, PerspectiveCamera } from '@react-three/drei';
+import { useScroll, Hud, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
 
 /* ────────────────────────────────────────────
@@ -139,7 +139,7 @@ const fragmentShader = /* glsl */ `
  * a CanvasTexture pill, deformed by a custom shader
  * that reacts to mouse hover. Ocupa viewport local del HUD.
  * ════════════════════════════════════════════ */
-function MatterPillMesh() {
+function MatterPillMesh({ scroll }) {
   const meshRef = useRef();
   const { viewport } = useThree();
   const [hovered, setHovered] = useState(false);
@@ -171,12 +171,13 @@ function MatterPillMesh() {
   const width = baseWidth * responsiveScale;
   const height = baseHeight * responsiveScale;
 
-  // ── Position: fixed top-left in camera space ──
+  // ── Position: anchored top-left, moves with scroll ──
   const position = useMemo(() => {
-    // Escalar dinámicamente también su anclaje a la izquierda, conservando márgenes consistentes
     // Un margen más amplio para despegarlo del borde izquierdo y que no se corte
-    const marginX = 1.0 * responsiveScale; // Mayor margen horizontal para evitar corte
-    const marginY = 0.45 * responsiveScale; // Mantener margen vertical original
+    const marginX = 1.0 * responsiveScale;
+    const marginY = 0.45 * responsiveScale;
+    
+    // HUD usa una cámara limpia en [0,0,8], por lo que podemos usar viewport.width/height
     const x = -viewport.width / 2 + (width / 2) + marginX; 
     const y = viewport.height / 2 - (height / 2) - marginY; 
     return [x, y, 0];
@@ -189,7 +190,14 @@ function MatterPillMesh() {
 
     // Uniformes básicos
     mat.uniforms.u_time.value += delta;
-    mat.uniforms.u_scale.value = responsiveScale; // Informar al shader sobre la escala dinámica
+    mat.uniforms.u_scale.value = responsiveScale; 
+
+    // Aplicar desplazamiento de scroll (en unidades de la escena)
+    // Para que se mueva 1:1 con el scroll de 4 páginas, multiplicamos por viewport.height * 4
+    meshRef.current.position.y = position[1] + (scroll.offset * viewport.height * 4);
+
+    // Ocultar si está muy fuera de la vista para optimizar y evitar clics accidentales
+    meshRef.current.visible = meshRef.current.position.y < (viewport.height / 2 + height * 2);
 
     // Smooth hover lerp (0→1 on hover, 1→0 on leave)
     const target = hovered ? 1 : 0;
@@ -252,13 +260,13 @@ function MatterPillMesh() {
   );
 }
 
-/* Envolvemos en un HUD para que quede anclado a la pantalla y sin heredar rotaciones de la escena */
+/* Envolvemos en un HUD para usar cámara limpia, y pasamos el control de scroll. */
 export default function MatterPill() {
+  const scroll = useScroll();
   return (
     <Hud renderPriority={2}>
-      {/* Misma configuración de la cámara principal para mantener proporciones fov={40} position={[0,0,8]} */}
       <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={40} />
-      <MatterPillMesh />
+      <MatterPillMesh scroll={scroll} />
     </Hud>
   );
 }
