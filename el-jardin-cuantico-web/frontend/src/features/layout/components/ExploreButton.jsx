@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { Link } from 'react-router-dom';
 import './ExploreButton.css';
 
 const ExploreButton = ({ label = "EXPLORAR", href = "#", ease = "power3.easeOut" }) => {
@@ -90,8 +91,8 @@ const ExploreButton = ({ label = "EXPLORAR", href = "#", ease = "power3.easeOut"
 
   return (
     <div className="explore-btn-container">
-      <a 
-        href={href} 
+      <Link 
+        to={href} 
         className="explore-btn" 
         ref={pillRef}
         onMouseEnter={handleEnter}
@@ -102,7 +103,7 @@ const ExploreButton = ({ label = "EXPLORAR", href = "#", ease = "power3.easeOut"
           <span className="pill-label">{label}</span>
           <span className="pill-label-hover" aria-hidden="true">{label}</span>
         </span>
-      </a>
+      </Link>
     </div>
   );
 };

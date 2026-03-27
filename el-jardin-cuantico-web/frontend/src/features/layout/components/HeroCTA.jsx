@@ -40,7 +40,7 @@ export default function HeroCTA({ progressRef }) {
       opacity: 0,
       transform: 'translate(-50%, 60vh)'
     }}>
-      <ExploreButton label="EXPLORAR" href="#explorar" />
+      <ExploreButton label="EXPLORAR" href="/explorar" />
     </div>
   );
 }
