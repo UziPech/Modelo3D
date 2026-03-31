@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Observer } from 'gsap/all';
+import { useGSAP } from '@gsap/react';
 import './SpriteExperience.css';
 
-gsap.registerPlugin(ScrollTrigger, Observer);
+gsap.registerPlugin(useGSAP, ScrollTrigger, Observer);
 
 // ── Sequence Configuration ─────────────────────────────────────────────
 const SEQ1_FRAMES = 64;
@@ -30,18 +31,25 @@ const getFramePath = (globalIndex) => {
  * Carga 64 fotogramas de la Secuencia 1 para mostrar la experiencia de inmediato,
  * luego carga 71 fotogramas de la Secuencia 2 silenciosamente en segundo plano.
  * El scroll mapea de forma continua los 135 frames totales — el usuario nunca
- * percibe la transición entre secuencias.
+ * percibe la transición entre secuencias gracias al efecto de resplandor blanco.
  */
 export default function SpriteExperience() {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const loaderRef = useRef(null);
+  const scrubUIRef = useRef(null);
+  const introUIRef = useRef(null);
   const frameRef = useRef(0);
   const bitmapsRef = useRef([]);
+  const watermarkRef = useRef(null);
   const [ready, setReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
+  
+  // Parallax refs
+  const parallaxContainerRef = useRef(null);
+  const parallaxElementsRef = useRef([]);
 
-  useEffect(() => {
+  useGSAP((context, contextSafe) => {
     // ── Override body/root to allow native scroll ──────────────────
     const body = document.body;
     const root = document.getElementById('root');
@@ -65,7 +73,6 @@ export default function SpriteExperience() {
       ctx.imageSmoothingQuality = 'high';
     }
 
-    let stInstance = null;
     let rafId = null;
 
     // ── Resize canvas to Retina resolution ────────────────────────────
@@ -133,17 +140,13 @@ export default function SpriteExperience() {
       // Phase 3: Load Sequence 2 silently in background
       loadRange(SEQ1_FRAMES, TOTAL_FRAMES).catch(console.error);
 
-      let ctxGsap;
-      let observer;
-
       const proxy = { progress: 0 };
 
       // ── Sensitivity adjusted for 135 total frames ──────────────────
-      // Original: 0.0015 for 64 frames.
-      // To preserve the same physical scroll-per-frame feel:
-      const SCROLL_SENSITIVITY = 0.0015 * (SEQ1_FRAMES / TOTAL_FRAMES);
-      const KEY_STEP = 0.05 * (SEQ1_FRAMES / TOTAL_FRAMES);
-      const KEY_STEP_LARGE = 0.1 * (SEQ1_FRAMES / TOTAL_FRAMES);
+      // Lowered SCROLL_SENSITIVITY to make the scrolling last longer
+      const SCROLL_SENSITIVITY = 0.0006 * (SEQ1_FRAMES / TOTAL_FRAMES);
+      const KEY_STEP = 0.02 * (SEQ1_FRAMES / TOTAL_FRAMES);
+      const KEY_STEP_LARGE = 0.05 * (SEQ1_FRAMES / TOTAL_FRAMES);
 
       const updateCanvas = () => {
         const c = canvasRef.current;
@@ -177,9 +180,71 @@ export default function SpriteExperience() {
 
           cx.drawImage(bitmap, ox, oy, sw, sh);
         }
+
+        // ── Transition Effect (White Flash) ─────────────────────────
+        const transitionPoint = SEQ1_FRAMES - 0.5; // Cut happens effectively near here
+        const effectRadius = 9; // ~9 frames before and after the cut
+        
+        const distance = Math.abs(scaledProgress - transitionPoint);
+        
+        if (distance <= effectRadius) {
+          // alpha goes from 0 (at distance = radius) up to 1 (at distance = 0)
+          const alpha = 1 - (distance / effectRadius);
+          const easedAlpha = alpha * alpha; // Quadratic ease for a punchier "flash" look
+          
+          cx.fillStyle = `rgba(255, 255, 255, ${easedAlpha})`;
+          cx.fillRect(0, 0, c.width, c.height);
+        }
+
+        // ── Canvas Initial Blur (Abstract Clouds) ─────────────────
+        // We blur heavily at progress 0, and lower to 0 by progress 0.15
+        const blurProgress = gsap.utils.clamp(0, 1, proxy.progress / 0.15);
+        // Start at 40px blur, go to 0px
+        const canvasBlur = 40 * (1 - Math.pow(blurProgress, 0.5));
+        c.style.filter = `blur(${canvasBlur}px) contrast(${1 + (1 - blurProgress) * 0.2})`;
+
+        // ── Editorial Text Progress scrub ─────────────────────────────
+        if (scrubUIRef.current) {
+          // Move the whole container up quickly but subtly (only 80px)
+          const containerProgress = gsap.utils.clamp(0, 1, proxy.progress / 0.08);
+          const easeOut = 1 - Math.pow(1 - containerProgress, 3); // cubic out
+          const containerY = -(easeOut * 80);
+          scrubUIRef.current.style.transform = `translateY(${containerY.toFixed(2)}px)`;
+
+          // Stagger fade and cinematic blur on individual elements (Title, Cloud, Subtitle)
+          parallaxElementsRef.current.forEach((el, index) => {
+            if (!el) return;
+            // The title (index 1) fades out first, then others stagger
+            const manualOrder = index === 1 ? 0 : index === 0 ? 1 : 2; 
+            const staggerOffset = manualOrder * 0.01; // smaller stagger for speed
+            
+            // Fades out entirely within 0.04 of scroll after stagger offset! Very fast and subtle.
+            const localProgress = gsap.utils.clamp(0, 1, (proxy.progress - staggerOffset) / 0.04);
+            const easeIn = Math.pow(localProgress, 3); // cubic for softer dissolve
+            
+            const opacity = Math.max(0, 1 - easeIn); 
+            const blur = easeIn * 12; // lower max blur for subtlety
+            
+            el.style.opacity = opacity.toFixed(3);
+            el.style.filter = `blur(${blur.toFixed(2)}px)`;
+            el.style.visibility = opacity <= 0.01 ? 'hidden' : 'visible';
+          });
+        }
+
+        // ── Watermark scrubbing ─────────────────────────────────────
+        if (watermarkRef.current) {
+           // The user specifically wants the watermark to APPEAR on framees2 (after frame 64)
+           // frame 64 / 135 = 0.474 progress
+           // Fade it in smoothly between progress 0.44 and 0.47
+           const wp = gsap.utils.clamp(0, 1, (proxy.progress - 0.44) / 0.03);
+           const wOpacity = wp;
+           watermarkRef.current.style.opacity = wOpacity.toFixed(3);
+           watermarkRef.current.style.visibility = wOpacity <= 0.01 ? 'hidden' : 'visible';
+        }
       };
 
-      const handleKeyDown = (e) => {
+      // Wrapped with contextSafe to ensure cleanups happen properly
+      const handleKeyDown = contextSafe((e) => {
         let delta = 0;
         if (e.key === "ArrowDown" || e.key === "PageDown") delta = KEY_STEP;
         if (e.key === "ArrowUp" || e.key === "PageUp") delta = -KEY_STEP;
@@ -198,50 +263,67 @@ export default function SpriteExperience() {
             }
           });
         }
-      };
-
-      ctxGsap = gsap.context(() => {
-        const tl = gsap.timeline({ paused: true });
-        // Heavy parallax + gentle zoom for extreme depth across all 135 frames
-        tl.fromTo(canvasRef.current, {
-          scale: 1.15, yPercent: -5, transformOrigin: "center center"
-        }, {
-          scale: 1.0, yPercent: 0, ease: "none", duration: 1
-        });
-
-        proxy.updateTimeline = () => tl.progress(proxy.progress);
-
-        updateCanvas();
-        proxy.updateTimeline();
-
-        observer = Observer.create({
-          target: window,
-          type: "wheel,touch,pointer",
-          wheelSpeed: -1,
-          onChange: (self) => {
-            let p = proxy.progress + (self.deltaY * SCROLL_SENSITIVITY);
-            p = gsap.utils.clamp(0, 1, p);
-            if (p !== proxy.progress) {
-              proxy.progress = p;
-              updateCanvas();
-              proxy.updateTimeline();
-            }
-          },
-          tolerance: 10,
-          preventDefault: true
-        });
-
-        window.addEventListener("keydown", handleKeyDown);
       });
 
-      // Hand off cleanup logic
-      stInstance = {
-        kill: () => {
-          observer?.kill();
-          window.removeEventListener("keydown", handleKeyDown);
-          ctxGsap?.revert();
-        }
-      };
+      const tl = gsap.timeline({ paused: true });
+      // Heavy parallax + gentle zoom for extreme depth across all 135 frames
+      tl.fromTo(canvasRef.current, {
+        scale: 1.15, yPercent: -5, transformOrigin: "center center"
+      }, {
+        scale: 1.0, yPercent: 0, ease: "none", duration: 1
+      });
+
+      proxy.updateTimeline = () => tl.progress(proxy.progress);
+
+      updateCanvas();
+      proxy.updateTimeline();
+
+      Observer.create({
+        target: window,
+        type: "wheel,touch,pointer",
+        wheelSpeed: -1,
+        onChange: (self) => {
+          let p = proxy.progress + (self.deltaY * SCROLL_SENSITIVITY);
+          p = gsap.utils.clamp(0, 1, p);
+          if (p !== proxy.progress) {
+            proxy.progress = p;
+            updateCanvas();
+            proxy.updateTimeline();
+          }
+        },
+        tolerance: 10,
+        preventDefault: true
+      });
+
+      // ── Mouse Parallax effect on the intro text ─────────────────────
+      const handleMouseMove = contextSafe((e) => {
+        if (!ready || proxy.progress > 0.1) return; // only interact at the very top
+        const x = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+        const y = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+
+        parallaxElementsRef.current.forEach((el, index) => {
+          if (!el) return;
+          const depth = (index + 1) * 15; // different depth per element
+          gsap.to(el, {
+            x: x * depth,
+            y: y * depth,
+            rotationX: -y * (depth * 0.2), // slight 3D tilt
+            rotationY: x * (depth * 0.2),
+            duration: 1.5,
+            ease: "power2.out",
+            overwrite: "auto"
+          });
+        });
+      });
+
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("mousemove", handleMouseMove);
+
+      // Save a reference to perform local DOM cleanup on unmount
+      context.add("cleanupDOM", () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        window.removeEventListener("mousemove", handleMouseMove);
+      });
     };
 
     preload();
@@ -250,7 +332,8 @@ export default function SpriteExperience() {
     return () => {
       window.removeEventListener('resize', resize);
       if (rafId) cancelAnimationFrame(rafId);
-      stInstance?.kill();
+      
+      // We manually kill bitmaps and restore overflow here when useGSAP unmounts
       bitmapsRef.current.forEach((bmp) => bmp?.close?.());
       bitmapsRef.current = [];
       body.style.overflow = saved.bodyOverflow;
@@ -260,11 +343,17 @@ export default function SpriteExperience() {
         root.style.overflow = saved.rootOverflow;
       }
     };
-  }, []);
+  }, { scope: sectionRef });
 
   return (
     <section ref={sectionRef} className="sprite-section">
       <canvas ref={canvasRef} className="sprite-canvas" />
+
+      {/* Brand Watermark Overlay */}
+      <div className="brand-watermark" ref={watermarkRef}>
+        <img src="/assets/images/perfile.jpg" alt="Watermark" className="brand-watermark-img" />
+        <span className="brand-watermark-text">Uziel Isaac</span>
+      </div>
 
       {/* Premium White Loading overlay — Animates away via GSAP */}
       {!ready && (
@@ -273,6 +362,75 @@ export default function SpriteExperience() {
           <span className="sprite-loader__label">INDEXANDO DATOS...</span>
         </div>
       )}
+
+      <div className="cinematic-curtain" ref={(el) => {
+        // Simple entrance effect for the curtain when ready
+        if (ready && el && !el.dataset.animated) {
+          el.dataset.animated = "true";
+          gsap.to(el, { opacity: 0, duration: 2, ease: "power2.inOut", pointerEvents: "none" });
+        }
+      }} />
+
+      <div ref={scrubUIRef} className="hero-editorial-overlay" style={{ pointerEvents: 'none', willChange: 'opacity, filter, transform', opacity: ready ? 1 : 0, transition: 'opacity 0.5s ease-out', perspective: '1000px' }}>
+        <div ref={(el) => {
+          if (ready && el && !el.dataset.animated) {
+            el.dataset.animated = "true";
+            
+            // Complex Entrance GSAP Timeline
+            const tl = gsap.timeline();
+
+            tl.fromTo('.gallery-corner',
+              { opacity: 0, filter: 'blur(5px)' },
+              { opacity: 1, filter: 'blur(0px)', duration: 1.5, stagger: 0.1, ease: 'power2.out', delay: 0.1 }
+            );
+
+            tl.fromTo('.editorial-line-accent', 
+              { scaleY: 0, transformOrigin: 'bottom' }, 
+              { scaleY: 1, duration: 1.5, ease: 'expo.inOut' },
+              "-=1.2"
+            );
+
+            tl.fromTo('.title-word', 
+              { y: '120%', rotationZ: 5, filter: 'blur(5px)' },
+              { y: '0%', rotationZ: 0, filter: 'blur(0px)', duration: 1.8, ease: 'power4.out', stagger: 0.15 },
+              "-=0.8"
+            );
+
+            tl.fromTo('.editorial-subtitle', 
+              { opacity: 0, y: 30, letterSpacing: '0em', filter: 'blur(10px)' },
+              { opacity: 1, y: 0, letterSpacing: '0.4em', filter: 'blur(0px)', duration: 2, ease: 'expo.out' },
+              "-=1.4"
+             );
+
+             // Continuous subtle floating animation
+             gsap.to('.editorial-title', {
+                y: '-=15',
+                duration: 4,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1,
+                delay: 2
+             });
+          }
+        }} style={{ willChange: 'opacity, transform, filter', transformStyle: 'preserve-3d', width: '100%', height: '100%' }}>
+          
+          <div className="gallery-corner top-left">UZIEL ISAAC © 2026</div>
+          <div className="gallery-corner top-right">PORTFOLIO / VOL 1</div>
+          <div className="gallery-corner bottom-left">MÉXICO</div>
+          <div className="gallery-corner bottom-right">SCROLL TO EXPLORE</div>
+
+          <div className="gallery-center" style={{ height: '100%' }}>
+            <div ref={el => parallaxElementsRef.current[0] = el} className="editorial-line-accent"></div>
+            
+            <h1 ref={el => parallaxElementsRef.current[1] = el} className="editorial-title">
+              <span className="title-line"><span className="title-word">FULLSTACK</span></span>
+              <span className="title-line"><span className="title-word title-word-highlight">DEVELOPER</span></span>
+            </h1>
+            
+            <p ref={el => parallaxElementsRef.current[2] = el} className="editorial-subtitle">BY UZIEL ISAAC — ARCHITECTURE &amp; CODE</p>
+          </div>
+        </div>
+      </div>
 
       {ready && (
         <div className="sprite-hint">
