@@ -80,12 +80,21 @@
 .sprite-hint__line {
   width: 1px;
   height: 40px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
 }
 
 @keyframes hint-fade {
-  0%,100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
-  50%      { opacity: 1;   transform: translateX(-50%) translateY(6px); }
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(6px);
+  }
 }
 
 /* ── Editorial Overlay (Phase 1) ────────────────────────────────── */
@@ -143,11 +152,12 @@
 
 /* ── Typography Animation Classes ─────────────────────────────── */
 .title-line {
-  display: flex;
-  overflow: hidden; /* Acts as a mask for the sliding words */
+  display: inline-flex;
+  overflow: hidden;
+  /* Acts as a mask for the sliding words */
   vertical-align: top;
-  margin-right: -0.01em; /* fixes rendering spacing */
-  justify-content: center;
+  margin-right: -0.01em;
+  /* fixes rendering spacing */
 }
 
 .title-word {
@@ -156,72 +166,18 @@
 }
 
 .title-word-highlight {
-  /* Elegant thin text-stroke for a clean outline look */
+  /* Give the highlighted word a slight glassy/muted texture for Awwwards contrast */
   color: transparent;
-  -webkit-text-stroke: 1px rgba(17, 17, 17, 0.85);
+  -webkit-text-stroke: 1.5px #111111;
   position: relative;
 }
 
-/* ── Gallery Elements ─────────────────────────────────────────── */
-.gallery-corner {
+.title-word-highlight::after {
+  content: "DEVELOPER";
   position: absolute;
-  font-family: var(--font-primary, 'Inter', sans-serif);
-  font-size: 0.55rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: #555;
-  padding: 3rem;
-  pointer-events: none;
-}
-
-.gallery-corner.top-left { top: 3.5rem; left: 0; } /* offset for the VOLVER button */
-.gallery-corner.top-right { top: 0; right: 0; text-align: right; }
-.gallery-corner.bottom-left { bottom: 0; left: 0; }
-.gallery-corner.bottom-right { bottom: 0; right: 0; text-align: right; }
-
-.gallery-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-/* Watermark to cover specific fixed spots of the baked sequence */
-.brand-watermark {
-  position: absolute;
-  bottom: 12px; /* moved down to cover Veo entirely */
-  right: -10px; /* moved right to cover the edge of Veo */
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 25px 8px 12px;
-  border-radius: 999px; /* Classic premium badge */
-  background: rgba(10, 10, 10, 0.95); /* Deeper black */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 5; /* Over canvas, under editorial overlay */
-  pointer-events: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  will-change: opacity, visibility;
-  transform: scale(0.9); /* slight size adjustment to fit the corner beautifully */
-}
-
-.brand-watermark-img {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-  filter: grayscale(100%) contrast(1.1); /* elegant black and white edit */
-}
-
-.brand-watermark-text {
-  font-family: var(--font-primary, 'Inter', sans-serif);
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #fff; /* White text on dark background */
-  white-space: nowrap;
+  top: 5px;
+  left: 5px;
+  color: rgba(17, 17, 17, 0.15);
+  z-index: -1;
+  filter: blur(4px);
 }

@@ -41,10 +41,9 @@ export default function SpriteExperience() {
   const introUIRef = useRef(null);
   const frameRef = useRef(0);
   const bitmapsRef = useRef([]);
-  const watermarkRef = useRef(null);
   const [ready, setReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
-  
+
   // Parallax refs
   const parallaxContainerRef = useRef(null);
   const parallaxElementsRef = useRef([]);
@@ -184,14 +183,14 @@ export default function SpriteExperience() {
         // ── Transition Effect (White Flash) ─────────────────────────
         const transitionPoint = SEQ1_FRAMES - 0.5; // Cut happens effectively near here
         const effectRadius = 9; // ~9 frames before and after the cut
-        
+
         const distance = Math.abs(scaledProgress - transitionPoint);
-        
+
         if (distance <= effectRadius) {
           // alpha goes from 0 (at distance = radius) up to 1 (at distance = 0)
           const alpha = 1 - (distance / effectRadius);
           const easedAlpha = alpha * alpha; // Quadratic ease for a punchier "flash" look
-          
+
           cx.fillStyle = `rgba(255, 255, 255, ${easedAlpha})`;
           cx.fillRect(0, 0, c.width, c.height);
         }
@@ -205,41 +204,16 @@ export default function SpriteExperience() {
 
         // ── Editorial Text Progress scrub ─────────────────────────────
         if (scrubUIRef.current) {
-          // Move the whole container up quickly but subtly (only 80px)
-          const containerProgress = gsap.utils.clamp(0, 1, proxy.progress / 0.08);
-          const easeOut = 1 - Math.pow(1 - containerProgress, 3); // cubic out
-          const containerY = -(easeOut * 80);
-          scrubUIRef.current.style.transform = `translateY(${containerY.toFixed(2)}px)`;
+          // The text should disappear fully by around 15% of the total progress
+          const uiProgress = gsap.utils.clamp(0, 1, proxy.progress / 0.15);
+          const opacity = 1 - Math.pow(uiProgress, 1.5); // Ease-out fading mapped natively
+          const blur = uiProgress * 25; // up to 25px blur on exit
+          const y = -(uiProgress * 250); // moves up faster
+          const scale = 1 + (uiProgress * 0.15); // scales up slightly
 
-          // Stagger fade and cinematic blur on individual elements (Title, Cloud, Subtitle)
-          parallaxElementsRef.current.forEach((el, index) => {
-            if (!el) return;
-            // The title (index 1) fades out first, then others stagger
-            const manualOrder = index === 1 ? 0 : index === 0 ? 1 : 2; 
-            const staggerOffset = manualOrder * 0.01; // smaller stagger for speed
-            
-            // Fades out entirely within 0.04 of scroll after stagger offset! Very fast and subtle.
-            const localProgress = gsap.utils.clamp(0, 1, (proxy.progress - staggerOffset) / 0.04);
-            const easeIn = Math.pow(localProgress, 3); // cubic for softer dissolve
-            
-            const opacity = Math.max(0, 1 - easeIn); 
-            const blur = easeIn * 12; // lower max blur for subtlety
-            
-            el.style.opacity = opacity.toFixed(3);
-            el.style.filter = `blur(${blur.toFixed(2)}px)`;
-            el.style.visibility = opacity <= 0.01 ? 'hidden' : 'visible';
-          });
-        }
-
-        // ── Watermark scrubbing ─────────────────────────────────────
-        if (watermarkRef.current) {
-           // The user specifically wants the watermark to APPEAR on framees2 (after frame 64)
-           // frame 64 / 135 = 0.474 progress
-           // Fade it in smoothly between progress 0.44 and 0.47
-           const wp = gsap.utils.clamp(0, 1, (proxy.progress - 0.44) / 0.03);
-           const wOpacity = wp;
-           watermarkRef.current.style.opacity = wOpacity.toFixed(3);
-           watermarkRef.current.style.visibility = wOpacity <= 0.01 ? 'hidden' : 'visible';
+          scrubUIRef.current.style.opacity = opacity.toFixed(3);
+          scrubUIRef.current.style.filter = `blur(${blur.toFixed(2)}px)`;
+          scrubUIRef.current.style.transform = `translateY(${y.toFixed(2)}px) scale(${scale.toFixed(3)})`;
         }
       };
 
@@ -332,7 +306,7 @@ export default function SpriteExperience() {
     return () => {
       window.removeEventListener('resize', resize);
       if (rafId) cancelAnimationFrame(rafId);
-      
+
       // We manually kill bitmaps and restore overflow here when useGSAP unmounts
       bitmapsRef.current.forEach((bmp) => bmp?.close?.());
       bitmapsRef.current = [];
@@ -348,12 +322,6 @@ export default function SpriteExperience() {
   return (
     <section ref={sectionRef} className="sprite-section">
       <canvas ref={canvasRef} className="sprite-canvas" />
-
-      {/* Brand Watermark Overlay */}
-      <div className="brand-watermark" ref={watermarkRef}>
-        <img src="/assets/images/perfile.jpg" alt="Watermark" className="brand-watermark-img" />
-        <span className="brand-watermark-text">Uziel Isaac</span>
-      </div>
 
       {/* Premium White Loading overlay — Animates away via GSAP */}
       {!ready && (
@@ -375,60 +343,47 @@ export default function SpriteExperience() {
         <div ref={(el) => {
           if (ready && el && !el.dataset.animated) {
             el.dataset.animated = "true";
-            
+
             // Complex Entrance GSAP Timeline
             const tl = gsap.timeline();
-
-            tl.fromTo('.gallery-corner',
-              { opacity: 0, filter: 'blur(5px)' },
-              { opacity: 1, filter: 'blur(0px)', duration: 1.5, stagger: 0.1, ease: 'power2.out', delay: 0.1 }
+            tl.fromTo('.editorial-line-accent',
+              { scaleY: 0, transformOrigin: 'bottom' },
+              { scaleY: 1, duration: 1.5, ease: 'expo.inOut', delay: 0.2 }
             );
 
-            tl.fromTo('.editorial-line-accent', 
-              { scaleY: 0, transformOrigin: 'bottom' }, 
-              { scaleY: 1, duration: 1.5, ease: 'expo.inOut' },
-              "-=1.2"
-            );
-
-            tl.fromTo('.title-word', 
+            tl.fromTo('.title-word',
               { y: '120%', rotationZ: 5, filter: 'blur(5px)' },
               { y: '0%', rotationZ: 0, filter: 'blur(0px)', duration: 1.8, ease: 'power4.out', stagger: 0.15 },
               "-=0.8"
             );
 
-            tl.fromTo('.editorial-subtitle', 
+            tl.fromTo('.editorial-subtitle',
               { opacity: 0, y: 30, letterSpacing: '0em', filter: 'blur(10px)' },
               { opacity: 1, y: 0, letterSpacing: '0.4em', filter: 'blur(0px)', duration: 2, ease: 'expo.out' },
               "-=1.4"
-             );
+            );
 
-             // Continuous subtle floating animation
-             gsap.to('.editorial-title', {
-                y: '-=15',
-                duration: 4,
-                ease: "sine.inOut",
-                yoyo: true,
-                repeat: -1,
-                delay: 2
-             });
+            // Continuous subtle floating animation
+            gsap.to('.editorial-title', {
+              y: '-=15',
+              duration: 4,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: -1,
+              delay: 2
+            });
           }
-        }} style={{ willChange: 'opacity, transform, filter', transformStyle: 'preserve-3d', width: '100%', height: '100%' }}>
-          
-          <div className="gallery-corner top-left">UZIEL ISAAC © 2026</div>
-          <div className="gallery-corner top-right">PORTFOLIO / VOL 1</div>
-          <div className="gallery-corner bottom-left">MÉXICO</div>
-          <div className="gallery-corner bottom-right">SCROLL TO EXPLORE</div>
+        }} style={{ willChange: 'opacity, transform, filter', transformStyle: 'preserve-3d' }}>
+          <div ref={el => parallaxElementsRef.current[0] = el} className="editorial-line-accent"></div>
 
-          <div className="gallery-center" style={{ height: '100%' }}>
-            <div ref={el => parallaxElementsRef.current[0] = el} className="editorial-line-accent"></div>
-            
-            <h1 ref={el => parallaxElementsRef.current[1] = el} className="editorial-title">
-              <span className="title-line"><span className="title-word">FULLSTACK</span></span>
-              <span className="title-line"><span className="title-word title-word-highlight">DEVELOPER</span></span>
-            </h1>
-            
-            <p ref={el => parallaxElementsRef.current[2] = el} className="editorial-subtitle">BY UZIEL ISAAC — ARCHITECTURE &amp; CODE</p>
-          </div>
+          <h1 ref={el => parallaxElementsRef.current[1] = el} className="editorial-title">
+            <span className="title-line"><span className="title-word">FULL </span></span>
+            <span className="title-line"><span className="title-word">STACK</span></span>
+            <br />
+            <span className="title-line"><span className="title-word title-word-highlight">DEVELOPER</span></span>
+          </h1>
+
+          <p ref={el => parallaxElementsRef.current[2] = el} className="editorial-subtitle">BY UZIEL ISAAC — ARCHITECTURE &amp; CODE</p>
         </div>
       </div>
 

@@ -16,10 +16,17 @@ export default function EstatuaAnimada() {
     useFrame((state, delta) => {
         if (!groupRef.current) return;
 
-        // Auto rotación suave en la primera sección
-        if (scroll.offset < 0.25) {
-            groupRef.current.rotation.y += 0.5 * delta;
-        }
+        // Interacción con el mouse (parallax sutil)
+        // Lerp para suavizar el movimiento hacia el puntero
+        const targetX = (state.pointer.x * Math.PI) * 0.15;
+        const targetY = (state.pointer.y * Math.PI) * 0.1;
+        
+        // Sumar la rotación base impulsada por el scroll
+        // Un poco de rotación sobre Y mientras bajamos
+        const scrollRotation = scroll.offset * Math.PI * 1.5;
+
+        groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -targetY, 0.1);
+        groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetX + scrollRotation, 0.1);
 
         // Animación de traslación impulsada por el scroll
         groupRef.current.position.y = -2.5 - (scroll.offset * 1.5);

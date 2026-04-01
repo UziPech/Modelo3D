@@ -5,14 +5,14 @@
   --font-uziel: 'Bodoni Moda', serif;
   --font-isaac: 'Yellowtail', cursive;
   --font-pech: 'Gravitas One', cursive;
-  
+
   --text-hero: clamp(2.5rem, 8vw, 6rem);
   --text-h1: clamp(2rem, 5vw, 4rem);
   --text-h2: clamp(1.5rem, 4vw, 3rem);
   --text-h3: clamp(1.25rem, 3vw, 2.5rem);
   --text-body: clamp(1rem, 1.5vw, 1.125rem);
   --text-small: clamp(0.75rem, 1vw, 0.875rem);
-  
+
   /* Modular Spacing */
   --spacing-sm: clamp(0.5rem, 1vw, 1rem);
   --spacing-md: clamp(1rem, 2vw, 2rem);
@@ -134,9 +134,9 @@ canvas {
 
 @media (max-width: 768px) {
   .main-header {
-      flex-direction: column;
-      gap: var(--spacing-sm);
-      padding: var(--spacing-sm);
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
   }
 }
 
@@ -147,7 +147,7 @@ canvas {
 
 @media (max-width: 768px) {
   .content-wrapper {
-      padding: 0 5vw;
+    padding: 0 5vw;
   }
 }
 
@@ -178,7 +178,7 @@ canvas {
     align-items: center !important;
     text-align: center;
   }
-  
+
   .hero-text-wrapper {
     margin-left: 0;
   }
@@ -212,20 +212,23 @@ canvas {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.4) 40%,
-    rgba(255, 255, 255, 0.7) 50%,
-    rgba(255, 255, 255, 0.4) 60%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 40%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0.4) 60%,
+      transparent 100%);
   animation: shimmer 3s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 200%; }
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 200%;
+  }
 }
 
 /* Hero text reveal animation helpers */

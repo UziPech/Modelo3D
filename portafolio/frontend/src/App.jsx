@@ -61,7 +61,7 @@ export default function App() {
         <Suspense fallback={null}>
           <Sparkles count={50} scale={10} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
 
-          <ScrollControls pages={4} damping={0.1}>
+          <ScrollControls pages={6} damping={0.1}>
             {/* Fixed 3D UI element that now scrolls away */}
             <MatterPill />
 

@@ -4,23 +4,27 @@ import ExploreButton from './ExploreButton';
 
 export default function HeroCTA({ progressRef }) {
   const ctaRef = useRef(null);
-  const tweenY = useRef({ value: 0 });
 
   useEffect(() => {
     const el = ctaRef.current;
     if (!el) return;
 
+    // Deterministic mapper: scroll 0.90→1.00 maps to visibility 0→1
+    const scrollToProgress = gsap.utils.pipe(
+      gsap.utils.clamp(0.90, 1.00),
+      gsap.utils.mapRange(0.90, 1.00, 0, 1)
+    );
+
     const onTick = () => {
       const raw = progressRef?.current ?? 0;
-      
-      const target = gsap.utils.clamp(0, 1, (raw - 0.15) / 0.35);
-      tweenY.current.value += (target - tweenY.current.value) * 0.08;
-      
-      const yOffset = (1 - tweenY.current.value) * 60;
-      el.style.transform = `translate(-50%, ${yOffset}vh)`;
-      el.style.opacity = tweenY.current.value;
+      const progress = scrollToProgress(raw);
 
-      el.style.pointerEvents = tweenY.current.value > 0.1 ? 'auto' : 'none';
+      const yOffset = (1 - progress) * 60;
+      el.style.transform = `translate(-50%, ${yOffset}vh)`;
+      el.style.opacity = progress;
+      el.style.visibility = progress === 0 ? 'hidden' : 'visible';
+
+      el.style.pointerEvents = progress > 0.1 ? 'auto' : 'none';
     };
 
     gsap.ticker.add(onTick);

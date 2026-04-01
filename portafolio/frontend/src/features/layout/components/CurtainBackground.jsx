@@ -7,44 +7,43 @@ import gsap from 'gsap';
  * Architecture:
  *   body (#000)  ←  always black, the "reveal" color
  *   CurtainBackground (z-index: 0)  ←  white, gets clipped away
+ *   Shadow (z-index: 2) ← casts shadow over Canvas elements
  *   Canvas (z-index: 1)  ←  transparent bg, 3D scene
  *   Header (z-index: 10) ←  always on top
  *
  * Animation:
  *   clip-path: inset(0 0 0 0)      →  fully white (hero zone)
  *   clip-path: inset(0 0 100% 0)   →  fully clipped = black revealed
- *
- * The transition is driven by a GSAP ticker that reads `progressRef.current`
- * (written by ScrollProxy inside the Canvas). This avoids any manual rAF
- * and stays perfectly synced with the R3F render loop.
- *
- * @param {Object} props
- * @param {React.MutableRefObject<number>} props.progressRef - Scroll offset [0→1]
  */
 export default function CurtainBackground({ progressRef }) {
   const curtainRef = useRef(null);
-  const tweenProgress = useRef({ value: 0 }); // smoothed progress for GSAP
+  const shadowRef = useRef(null);
 
   useEffect(() => {
     const curtain = curtainRef.current;
-    if (!curtain) return;
+    const shadow = shadowRef.current;
+    if (!curtain || !shadow) return;
 
-    // GSAP ticker runs on every frame — reads the raw scroll offset,
-    // smoothly interpolates, and applies the clip-path.
     const onTick = () => {
       const raw = progressRef?.current ?? 0;
 
-      // Map scroll offset to curtain progress:
-      // 0–0.25 → curtain fully visible (progress 0)
-      // 0.25–0.5 → curtain animates away (progress 0→1)
-      // >0.5 → curtain fully gone (progress 1)
-      const target = gsap.utils.clamp(0, 1, (raw - 0.25) / 0.25);
-
-      // Smooth interpolation to avoid jitter
-      tweenProgress.current.value += (target - tweenProgress.current.value) * 0.1;
-
-      const pct = tweenProgress.current.value * 100;
+      // 0–0.80 → curtain fully visible
+      // 0.80–0.95 → curtain animates away
+      // >0.95 → curtain fully gone
+      const target = gsap.utils.clamp(0, 1, (raw - 0.80) / 0.15);
+      const pct = target * 100;
+      
       curtain.style.clipPath = `inset(0 0 ${pct}% 0)`;
+
+      // Posicionar la sombra justo en el borde visible de la cortina
+      shadow.style.transform = `translateY(${100 - pct}vh)`;
+      
+      // Controlar la opacidad de la sombra
+      let op = 0;
+      if (pct > 0 && pct < 100) op = 0.8; // Intensidad de la sombra
+      if (pct > 95) op = 0.8 * ((100 - pct) / 5); // Fade-out suave al llegar arriba
+      
+      shadow.style.opacity = op;
     };
 
     gsap.ticker.add(onTick);
@@ -52,20 +51,40 @@ export default function CurtainBackground({ progressRef }) {
   }, [progressRef]);
 
   return (
-    <div
-      ref={curtainRef}
-      className="curtain-background"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: '#ffffff',
-        zIndex: 0,
-        pointerEvents: 'none',
-        willChange: 'clip-path',
-      }}
-    />
+    <>
+      <div
+        ref={curtainRef}
+        className="curtain-background"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: '#ffffff',
+          zIndex: 0,
+          pointerEvents: 'none',
+          willChange: 'clip-path',
+        }}
+      />
+      
+      {/* Sombra proyectada por la cortina */}
+      <div
+        ref={shadowRef}
+        className="curtain-shadow"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '12vh', // Profundidad de la sombra
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)',
+          zIndex: 0, // Debajo del Canvas (z-index 1) pero por encima del fondo/texto para que no afecte a la estatua
+          pointerEvents: 'none',
+          willChange: 'transform, opacity',
+          opacity: 0,
+        }}
+      />
+    </>
   );
 }
