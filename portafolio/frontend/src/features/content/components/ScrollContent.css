@@ -1,0 +1,337 @@
+/* ScrollContent.css - Estilos Editoriales 'Awwwards' */
+
+/* ═══════════════════════════════════════════════════
+   SECCIÓN: HOOK NARRATIVO (No solo escribo...)
+   ═══════════════════════════════════════════════════ */
+
+.editorial-hook-container {
+    position: absolute;
+    top: 10%;
+    left: 8vw;
+    width: 55%;
+    height: 80%;
+    z-index: 10;
+}
+
+/* --- DECORATIVE: Section number --- */
+.editorial-section-number {
+    position: absolute;
+    top: -2vw;
+    right: 0;
+    font-family: var(--font-primary);
+    font-size: min(1vw, 14px);
+    font-weight: 300;
+    color: #bbb;
+    letter-spacing: 0.1em;
+    z-index: 5;
+}
+
+/* --- CAPA 1: GHOST TEXT / FONDO --- */
+.editorial-ghost {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-uziel);
+    font-size: min(18vw, 240px);
+    font-weight: 900;
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.12);
+    /* Aumentado de 0.06 a 0.12 y 2px */
+    white-space: nowrap;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    mask-image: radial-gradient(ellipse 80% 70% at center, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at center, black 20%, transparent 70%);
+}
+
+/* --- CAPA 2: MAIN HEADING (Elegante) --- */
+.editorial-headline {
+    font-family: var(--font-uziel);
+    font-size: min(8vw, 110px);
+    /* Aumentado el tamaño */
+    font-weight: 900;
+    /* Aumentado a 900 */
+    color: #050505;
+    /* Un negro más profundo */
+    margin: 0;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+    text-transform: uppercase;
+}
+
+/* Accent word: "código." en cursiva serif */
+.editorial-headline-accent {
+    display: block;
+    font-family: var(--font-isaac);
+    font-size: 1.4em;
+    /* Aumentado el tamaño relativo */
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #1a1a1a;
+    margin-top: 0.1em;
+}
+
+/* --- CAPA 3: SCRIPT / CURSIVA --- */
+.editorial-script-wrapper {
+    position: relative;
+    margin-top: 2vw;
+    margin-left: 5vw;
+    transform: rotate(-3deg);
+    transform-origin: left center;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.editorial-script {
+    font-family: var(--font-isaac);
+    font-size: min(3.5vw, 48px);
+    font-weight: 400;
+    color: #333;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* --- CAPA 4: CIERRE MÁS LEGIBLE --- */
+.editorial-closure-wrapper {
+    margin-top: 3vw;
+    margin-left: 2vw;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    z-index: 2;
+    position: relative;
+}
+
+.editorial-closure-line {
+    width: 50px;
+    height: 1px;
+    background-color: #999;
+    flex-shrink: 0;
+}
+
+.editorial-closure {
+    font-family: var(--font-secondary);
+    font-size: min(1.6vw, 20px);
+    font-weight: 500;
+    color: #555;
+    letter-spacing: 0.06em;
+    margin: 0;
+    font-style: italic;
+}
+
+/* --- IMAGE EFFECTS --- */
+.editorial-statue {
+    position: absolute;
+    bottom: 5%;
+    left: -5%;
+    height: 55%;
+    z-index: 1;
+    pointer-events: none;
+    object-fit: contain;
+    will-change: transform, opacity;
+    opacity: 0.35;
+    mask-image: linear-gradient(to top, transparent 0%, black 30%, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 30%, black 70%, transparent 100%);
+    filter: grayscale(0.3);
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SECCIÓN: MANIFIESTO (Código Meticuloso)
+   ═══════════════════════════════════════════════════ */
+
+.manifesto-container {
+    position: relative;
+    max-width: 650px;
+    text-align: center;
+    padding: 40px 30px;
+}
+
+/* Ghost de fondo — símbolo decorativo grande */
+.manifesto-ghost {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    font-size: min(25vw, 300px);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.1);
+    /* Aumentado contraste */
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Vertical accent label */
+.manifesto-vertical-label {
+    position: absolute;
+    top: 50%;
+    left: -60px;
+    transform: translateY(-50%) rotate(-90deg);
+    font-family: var(--font-primary);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: #ccc;
+    text-transform: uppercase;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+/* Divider decorativo */
+.manifesto-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.manifesto-divider-line {
+    width: 60px;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.manifesto-divider-label {
+    font-family: var(--font-primary);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: #aaa;
+    text-transform: uppercase;
+}
+
+/* Título del manifesto — mixed case, serif elegante */
+.manifesto-title {
+    font-family: var(--font-uziel);
+    font-size: min(7vw, 85px);
+    /* Aumentado el tamaño */
+    font-weight: 900;
+    /* Aumentado a 900 */
+    color: #000;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.05;
+    position: relative;
+    z-index: 1;
+}
+
+/* Cuerpo del manifesto */
+.manifesto-body {
+    font-family: var(--font-primary);
+    font-size: min(1.5vw, 18px);
+    line-height: 1.8;
+    color: #555;
+    margin: 0 0 1.2rem 0;
+    position: relative;
+    z-index: 1;
+}
+
+.manifesto-highlight {
+    font-family: var(--font-isaac);
+    font-size: 1.4em;
+    font-weight: 400;
+    color: #222;
+    font-style: normal;
+}
+
+/* Tagline de cierre */
+.manifesto-tagline {
+    font-family: var(--font-isaac);
+    font-size: min(2.2vw, 28px);
+    font-weight: 400;
+    color: #333;
+    margin: 0.8rem 0 0 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* Skill pills */
+.manifesto-pills {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.manifesto-pill {
+    font-family: var(--font-primary);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #888;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid #ddd;
+    padding: 0.4em 1em;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+}
+
+.manifesto-pill:hover {
+    color: #111;
+    border-color: #111;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+/* --- IMAGE EFFECTS MANIFESTO --- */
+.manifesto-cat {
+    position: absolute;
+    bottom: -8%;
+    left: -20%;
+    width: 120px;
+    height: 120px;
+    z-index: 2;
+    pointer-events: none;
+    will-change: transform, opacity;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 0, 0, 0.12);
+}
+
+.manifesto-cat img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+}
+
+.awwwards-stamp {
+    position: absolute;
+    top: -10%;
+    right: 0;
+    width: 70px;
+    height: 70px;
+    z-index: 5;
+    pointer-events: none;
+    will-change: transform;
+    overflow: hidden;
+    border: 1.5px solid rgba(0, 0, 0, 0.12);
+}
+
+.awwwards-stamp img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.heart-image {
+    width: 25vw;
+    height: auto;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.25));
+    /* Sombra para darle presencia física */
+    pointer-events: none;
+}

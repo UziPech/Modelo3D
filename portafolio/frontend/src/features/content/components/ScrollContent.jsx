@@ -2,6 +2,7 @@ import React, { useRef, useLayoutEffect } from 'react';
 import { useScroll } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import gsap from 'gsap';
+import './ScrollContent.css';
 
 export default function ScrollContent() {
     const scroll = useScroll();
@@ -16,6 +17,7 @@ export default function ScrollContent() {
 
     // Refs Hook Narrativo 1
     const hook1Ref = useRef();
+    const hookGhostRef = useRef();
     const hookLine1Ref = useRef();
     const hookLine2Ref = useRef();
     const hookLine3Ref = useRef();
@@ -30,6 +32,12 @@ export default function ScrollContent() {
 
     // Refs de la Zona Negra (Manifiesto)
     const manifestoRef = useRef();
+    const catRef = useRef();
+    const awwwardsRef = useRef();
+
+    // Refs Imágenes Nuevas
+    const davidStatueRef = useRef();
+    const heartImageRef = useRef();
 
     // Animación inicial del Hero (sólo carga, no scroll)
     useLayoutEffect(() => {
@@ -81,13 +89,24 @@ export default function ScrollContent() {
             hook1Ref.current.style.visibility = op === 0 ? 'hidden' : 'visible';
 
             if (op > 0) {
-                const slide1 = gsap.utils.clamp(-50, 50, gsap.utils.mapRange(0.10, 0.30, 50, -50, offset));
-                const slide2 = gsap.utils.clamp(-50, 50, gsap.utils.mapRange(0.10, 0.30, -50, 50, offset));
-                const slide3 = gsap.utils.clamp(0, 100, gsap.utils.mapRange(0.10, 0.30, 100, 0, offset));
+                // Paralaje profundo: Fondo gigante, medio firme, frente rápido
+                const parallaxGhost = gsap.utils.clamp(-40, 40, gsap.utils.mapRange(0.10, 0.30, -50, 30, offset));
+                const parallaxHeadline = gsap.utils.clamp(-10, 10, gsap.utils.mapRange(0.10, 0.30, -10, 10, offset));
+                const parallaxScriptX = gsap.utils.clamp(-20, 20, gsap.utils.mapRange(0.10, 0.30, 20, -20, offset));
+                const parallaxScriptY = gsap.utils.clamp(-40, 40, gsap.utils.mapRange(0.10, 0.30, 40, -40, offset));
+                const slideClosure = gsap.utils.clamp(-15, 15, gsap.utils.mapRange(0.10, 0.30, 15, -15, offset));
 
-                if (hookLine1Ref.current) hookLine1Ref.current.style.transform = `translateX(${slide1}vw)`;
-                if (hookLine2Ref.current) hookLine2Ref.current.style.transform = `translateX(${slide2}vw)`;
-                if (hookLine3Ref.current) hookLine3Ref.current.style.transform = `translateY(${slide3}px)`;
+                if (hookGhostRef.current) hookGhostRef.current.style.transform = `translate(-50%, calc(-50% + ${parallaxGhost}px))`;
+                if (hookLine1Ref.current) hookLine1Ref.current.style.transform = `translateY(${parallaxHeadline}px)`;
+                if (hookLine2Ref.current) hookLine2Ref.current.style.transform = `translate(${parallaxScriptX}vw, ${parallaxScriptY}px)`;
+                if (hookLine3Ref.current) hookLine3Ref.current.style.transform = `translateX(${slideClosure}vw)`;
+
+                // Efecto Estatua David (Emerger desde abajo)
+                if (davidStatueRef.current) {
+                    const statueY = gsap.utils.clamp(0, 100, gsap.utils.mapRange(0.10, 0.20, 100, 0, offset));
+                    davidStatueRef.current.style.opacity = op;
+                    davidStatueRef.current.style.transform = `translateY(${statueY}px)`;
+                }
             }
         }
 
@@ -105,6 +124,17 @@ export default function ScrollContent() {
 
             if (op > 0) {
                 manifestoRef.current.style.transform = `translateY(${(1 - op) * 40}px)`;
+
+                // Gato: Parallax inverso (sube mientras bajas)
+                if (catRef.current) {
+                    const catY = gsap.utils.clamp(-50, 50, gsap.utils.mapRange(0.28, 0.48, 50, -50, offset));
+                    catRef.current.style.transform = `translateY(${catY}px)`;
+                }
+                // Sello Awwwards: Rotación continua basada en el scroll
+                if (awwwardsRef.current) {
+                    const rot = offset * 1000;
+                    awwwardsRef.current.style.transform = `rotate(${rot}deg)`;
+                }
             }
         }
 
@@ -146,9 +176,15 @@ export default function ScrollContent() {
             heartRef.current.style.visibility = op === 0 ? 'hidden' : 'visible';
 
             if (op > 0) {
-                // Gentle breathing scale
+                // Gentle breathing scale on the container
                 const scale = gsap.utils.clamp(0.9, 1.15, 0.9 + (offset - 0.64) * 1.5);
                 heartRef.current.style.transform = `scale(${scale})`;
+
+                // Slight wobble on the image itself
+                if (heartImageRef.current) {
+                    const heartRot = Math.sin((offset - 0.64) * Math.PI * 6) * 8; // Tambaleo de +/- 8 grados
+                    heartImageRef.current.style.transform = `rotate(${heartRot}deg)`;
+                }
             }
         }
     });
@@ -197,36 +233,45 @@ export default function ScrollContent() {
                 </div>
             </div>
 
-            {/* SECCIÓN 2: THE HOOK NARRATIVE (Editorial Typography) */}
+            {/* SECCIÓN 2: THE HOOK NARRATIVE (Editorial Typography Awwwards Style) */}
             <div className="scroll-section" style={{ position: 'relative', overflow: 'hidden', pointerEvents: 'none' }}>
                 <div
                     ref={hook1Ref}
+                    className="editorial-hook-container"
                     style={{
-                        position: 'absolute', top: '18%', left: '3vw', width: '55%',
                         opacity: 0, visibility: 'hidden', willChange: 'opacity, visibility'
                     }}
                 >
-                    {/* Line 1 — DOMINANT headline */}
+                    {/* Layer 1: GHOST TEXT BACKGROUND */}
+                    <div ref={hookGhostRef} className="editorial-ghost" style={{ willChange: 'transform' }}>
+                        CÓDIGO.
+                    </div>
+
+                    {/* IMAGEN: Estatua de David (Entrando en parallax) */}
+                    <img ref={davidStatueRef} src="/assets/images/statua.png" alt="David Statue" className="editorial-statue" />
+
+                    {/* Decorative: Section number */}
+                    <span className="editorial-section-number" aria-hidden="true">02</span>
+
+                    {/* Layer 2: MAIN SOLID HEADLINE - Better composition */}
                     <div ref={hookLine1Ref} style={{ willChange: 'transform' }}>
-                        <h2 style={{ fontFamily: 'var(--font-pech)', fontSize: '5.5vw', fontWeight: '900', color: '#111', margin: 0, lineHeight: 1.1 }}>
-                            NO SOLO ESCRIBO CÓDIGO.
+                        <h2 className="editorial-headline">
+                            NO SOLO ESCRIBO<br />
+                            <span className="editorial-headline-accent">código.</span>
                         </h2>
                     </div>
 
-                    {/* Line 2 — secondary, lighter weight */}
-                    <div ref={hookLine2Ref} style={{ willChange: 'transform', marginTop: '2.5vw' }}>
-                        <p style={{
-                            fontFamily: 'var(--font-isaac)', fontSize: '2.8vw', fontWeight: '400',
-                            color: '#444', margin: 0, lineHeight: 1.3,
-                            fontStyle: 'italic'
-                        }}>
+                    {/* Layer 3: EDITORIAL SCRIPT OVERLAP */}
+                    <div ref={hookLine2Ref} className="editorial-script-wrapper" style={{ willChange: 'transform' }}>
+                        <p className="editorial-script">
                             Construyo cosas que funcionan.
                         </p>
                     </div>
 
-                    {/* Line 3 — quiet closure */}
-                    <div ref={hookLine3Ref} style={{ willChange: 'transform', marginTop: '2vw' }}>
-                        <p style={{ fontFamily: 'var(--font-pech)', fontSize: '2vw', fontWeight: '600', color: '#666', lineHeight: 1.2 }}>
+                    {/* Layer 4: CLOSURE with better readability */}
+                    <div ref={hookLine3Ref} className="editorial-closure-wrapper" style={{ willChange: 'transform' }}>
+                        <div className="editorial-closure-line"></div>
+                        <p className="editorial-closure">
                             ... que duran y que importan.
                         </p>
                     </div>
@@ -237,23 +282,56 @@ export default function ScrollContent() {
             <div className="scroll-section" style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
                 <div
                     ref={manifestoRef}
+                    className="manifesto-container"
                     style={{
                         opacity: 0,
                         visibility: 'hidden',
-                        maxWidth: '85vw',
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-syne)',
-                        fontSize: '1.4rem',
-                        lineHeight: '1.4',
-                        color: '#111',
-                        padding: '0 20px',
                         willChange: 'transform, opacity, visibility'
                     }}
                 >
-                    <strong style={{ fontWeight: '800', display: 'block', marginBottom: '16px', fontSize: '3rem', fontFamily: 'var(--font-pech)', letterSpacing: '-0.02em', color: '#000' }}>
-                        CÓDIGO METICULOSO.
-                    </strong>
-                    Como desarrollador <strong style={{ fontWeight: '800', fontFamily: 'var(--font-isaac)', fontSize: '2rem' }}>Full Stack especializado en Frontend</strong>, mi obsesión radica en la conjunción entre arquitectura invisible y estética brutalista. La tecnología sola no basta; exige diseño supremo.
+                    {/* Ghost decorativo de fondo */}
+                    <div className="manifesto-ghost" aria-hidden="true">♡</div>
+
+                    {/* IMAGEN: Gato (Círculo / Calcomanía) */}
+                    <div ref={catRef} className="manifesto-cat">
+                        <img src="/assets/images/remenberme.png" alt="Cat Drawing" />
+                    </div>
+
+                    {/* IMAGEN: Sello Awwwards (Cuadrado / Rotando) */}
+                    <div ref={awwwardsRef} className="awwwards-stamp">
+                        <img src="/assets/images/awwwrds_logo.png" alt="Awwwards Stamp" />
+                    </div>
+
+                    {/* Vertical Accent Label */}
+                    <span className="manifesto-vertical-label" aria-hidden="true">MANIFIESTO</span>
+
+                    {/* Línea decorativa superior */}
+                    <div className="manifesto-divider">
+                        <span className="manifesto-divider-line"></span>
+                        <span className="manifesto-divider-label">FILOSOFÍA</span>
+                        <span className="manifesto-divider-line"></span>
+                    </div>
+
+                    <h3 className="manifesto-title">
+                        Código<br />Meticuloso.
+                    </h3>
+
+                    <p className="manifesto-body">
+                        Como desarrollador <strong className="manifesto-highlight">Full Stack especializado en Frontend</strong>, mi obsesión radica en la conjunción entre arquitectura invisible y estética brutalista.
+                    </p>
+
+                    <p className="manifesto-tagline">
+                        La tecnología sola no basta; exige diseño supremo.
+                    </p>
+
+                    {/* Skill pills decorativas */}
+                    <div className="manifesto-pills">
+                        <span className="manifesto-pill">React</span>
+                        <span className="manifesto-pill">Three.js</span>
+                        <span className="manifesto-pill">GSAP</span>
+                        <span className="manifesto-pill">Node.js</span>
+                        <span className="manifesto-pill">Firebase</span>
+                    </div>
                 </div>
             </div>
 
@@ -312,7 +390,8 @@ export default function ScrollContent() {
                     style={{
                         position: 'absolute',
                         top: '20%',
-                        left: '5vw',
+                        left: '-10vw',
+                        width: '100vw',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -323,7 +402,7 @@ export default function ScrollContent() {
                     }}
                 >
                     <span style={{ fontSize: '5vw', fontFamily: 'var(--font-uziel)', fontWeight: '900', color: '#000', lineHeight: 1 }}>I</span>
-                    <span style={{ fontSize: '10vw', color: '#000', lineHeight: 1.1 }}>🖤</span>
+                    <img ref={heartImageRef} src="/assets/images/Corazon.png" alt="Black Heart" className="heart-image" />
                     <span style={{ fontSize: '5vw', fontFamily: 'var(--font-pech)', fontWeight: '900', color: '#000', letterSpacing: '-0.05em', lineHeight: 1 }}>DESIGN</span>
                 </div>
             </div>
