@@ -37,7 +37,7 @@
     font-weight: 900;
     line-height: 0.85;
     color: transparent;
-    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.12);
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.28);
     white-space: nowrap;
     z-index: 0;
     pointer-events: none;
@@ -65,35 +65,38 @@
 .editorial-headline-accent {
     display: block;
     font-family: var(--font-isaac);
-    font-size: 1.4em;
+    font-size: 0.72em;
     /* Aumentado el tamaño relativo */
     font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
-    color: #1a1a1a;
+    color: #333;
     margin-top: 0.1em;
 }
 
 /* --- CAPA 3: SCRIPT / CURSIVA --- */
 .editorial-script-wrapper {
     position: relative;
-    margin-top: 2vw;
-    margin-left: 5vw;
-    transform: rotate(-3deg);
+    margin-top: 2.5vw;
+    margin-left: 1vw;
+    transform: rotate(0deg);
     transform-origin: left center;
     z-index: 3;
     pointer-events: none;
 }
 
 .editorial-script {
-    font-family: var(--font-isaac);
-    font-size: min(3.5vw, 48px);
-    font-weight: 600;
-    color: #111;
+    font-family: var(--font-primary);
+    font-size: min(1.1vw, 13px);
+    font-weight: 400;
+    color: #888;
     margin: 0;
-    line-height: 1;
+    line-height: 1.6;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-style: normal;
+    text-shadow: none;
     white-space: nowrap;
-    text-shadow: 0px 2px 15px rgba(255, 255, 255, 0.9);
 }
 
 /* --- CAPA 4: CIERRE MÁS LEGIBLE --- */
@@ -238,7 +241,7 @@
 
 .manifesto-highlight {
     font-family: var(--font-isaac);
-    font-size: 1.4em;
+    font-size: 0.72em;
     font-weight: 400;
     color: #222;
     font-style: normal;

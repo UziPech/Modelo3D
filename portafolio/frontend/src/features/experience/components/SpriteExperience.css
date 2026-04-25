@@ -128,9 +128,13 @@
   font-size: clamp(0.6rem, 0.9vw, 0.9rem);
   color: #444;
   margin-top: 2.5rem;
-  letter-spacing: 0.4em;
+  letter-spacing: 0em;
   font-weight: 500;
   text-transform: uppercase;
+  /* Initial state for animation */
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(10px);
 }
 
 .editorial-line-accent {
@@ -138,6 +142,9 @@
   height: 60px;
   background-color: #000;
   margin: 0 auto 2rem auto;
+  /* Initial state for animation */
+  transform: scaleY(0);
+  transform-origin: bottom;
 }
 
 .cinematic-curtain {
@@ -163,21 +170,105 @@
 .title-word {
   display: inline-block;
   will-change: transform, filter;
+  /* Initial state to prevent flash */
+  transform: translateY(120%) rotateZ(5deg);
+  filter: blur(5px);
 }
 
 .title-word-highlight {
-  /* Give the highlighted word a slight glassy/muted texture for Awwwards contrast */
-  color: transparent;
-  -webkit-text-stroke: 1.5px #111111;
+  /* Brutalist offset style instead of blur */
+  color: #111111;
   position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
 }
 
 .title-word-highlight::after {
   content: "DEVELOPER";
   position: absolute;
-  top: 5px;
-  left: 5px;
-  color: rgba(17, 17, 17, 0.15);
+  top: 8px;
+  left: 8px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(17, 17, 17, 0.4);
   z-index: -1;
-  filter: blur(4px);
+  pointer-events: none;
+}
+
+/* ── Title Frame Decoration ──────────────────────────────────── */
+.title-frame {
+  position: relative;
+  padding: 3rem 4rem;
+  margin-bottom: 0.5rem;
+  /* Corner brackets using backgrounds */
+  background: 
+    linear-gradient(to right, rgba(17,17,17,0.5) 1px, transparent 1px) 0 0 / 1px 20px no-repeat,
+    linear-gradient(to bottom, rgba(17,17,17,0.5) 1px, transparent 1px) 0 0 / 20px 1px no-repeat,
+    linear-gradient(to left, rgba(17,17,17,0.5) 1px, transparent 1px) 100% 0 / 1px 20px no-repeat,
+    linear-gradient(to bottom, rgba(17,17,17,0.5) 1px, transparent 1px) 100% 0 / 20px 1px no-repeat,
+    linear-gradient(to right, rgba(17,17,17,0.5) 1px, transparent 1px) 0 100% / 1px 20px no-repeat,
+    linear-gradient(to top, rgba(17,17,17,0.5) 1px, transparent 1px) 0 100% / 20px 1px no-repeat,
+    linear-gradient(to left, rgba(17,17,17,0.5) 1px, transparent 1px) 100% 100% / 1px 20px no-repeat,
+    linear-gradient(to top, rgba(17,17,17,0.5) 1px, transparent 1px) 100% 100% / 20px 1px no-repeat;
+}
+
+.title-frame-badge {
+  position: absolute;
+  top: -9px;
+  left: 3rem;
+  background: #111;
+  color: #fff;
+  font-family: var(--font-primary, 'Inter', monospace);
+  font-size: 0.55rem;
+  padding: 0.3rem 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* ── Awwwards Decorators ─────────────────────────────────────── */
+.awwwards-frame {
+  position: absolute;
+  inset: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0;
+}
+
+.awwwards-decorator {
+  position: absolute;
+  font-family: var(--font-primary, 'Inter', monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: #fff;
+  mix-blend-mode: difference;
+  text-transform: uppercase;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.decorator-top-left {
+  top: 3rem;
+  left: 3rem;
+}
+
+.decorator-top-right {
+  top: 3rem;
+  right: 3rem;
+}
+
+.decorator-bottom-left {
+  bottom: 3rem;
+  left: 3rem;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.decorator-bottom-right {
+  bottom: 3rem;
+  right: 3rem;
 }

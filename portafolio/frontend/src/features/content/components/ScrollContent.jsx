@@ -256,7 +256,7 @@ const ScrollContent = React.memo(function ScrollContent() {
                 >
                     {/* Layer 1: GHOST TEXT BACKGROUND */}
                     <div ref={hookGhostRef} className="editorial-ghost" style={{ willChange: 'transform' }}>
-                        CÓDIGO.
+                        ARTE.
                     </div>
 
                     {/* IMAGEN: Estatua de David (Entrando en parallax) */}
@@ -268,16 +268,16 @@ const ScrollContent = React.memo(function ScrollContent() {
                     {/* Layer 2: MAIN SOLID HEADLINE - Better composition */}
                     <div ref={hookLine1Ref} style={{ willChange: 'transform', position: 'relative', zIndex: 2 }}>
                         <h2 className="editorial-headline">
-                            NO SOLO<br />
-                            ESCRIBO<br />
-                            <span className="editorial-headline-accent">código.</span>
+                            EL BUEN<br />
+                            CÓDIGO,<br />
+                            <span className="editorial-headline-accent">no se añade.</span>
                         </h2>
                     </div>
 
                     {/* Layer 3: EDITORIAL SCRIPT OVERLAP */}
                     <div ref={hookLine2Ref} className="editorial-script-wrapper" style={{ willChange: 'transform', position: 'relative', zIndex: 3 }}>
                         <p className="editorial-script">
-                            Construyo cosas que funcionan.
+                            La perfección ya vive dentro de él.
                         </p>
                     </div>
 
@@ -285,7 +285,7 @@ const ScrollContent = React.memo(function ScrollContent() {
                     <div ref={hookLine3Ref} className="editorial-closure-wrapper" style={{ willChange: 'transform', position: 'relative', zIndex: 2 }}>
                         <div className="editorial-closure-line"></div>
                         <p className="editorial-closure">
-                            ... que duran y que importan.
+                            — solo hay que revelarla.
                         </p>
                     </div>
                 </div>

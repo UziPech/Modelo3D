@@ -11,8 +11,9 @@ export default function ExplorarPage() {
   return (
     <div className="explorar-page">
       {/* Back button */}
-      <Link to="/" className="explorar-back" aria-label="Volver al inicio">
-        ← VOLVER
+      <Link to="/" className="awwwards-back-btn" aria-label="Volver al inicio">
+        <span className="back-arrow">←</span>
+        <span className="back-text">VOLVER</span>
       </Link>
 
       <SpriteExperience />

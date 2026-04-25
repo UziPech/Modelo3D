@@ -48,6 +48,56 @@ export default function SpriteExperience() {
   const parallaxContainerRef = useRef(null);
   const parallaxElementsRef = useRef([]);
 
+  // ── Explicit Entrance Animation ─────────────────────────────────────
+  useGSAP(() => {
+    if (!ready) return;
+
+    // Cinematic curtain fade
+    gsap.to('.cinematic-curtain', { opacity: 0, duration: 2, ease: "power2.inOut", pointerEvents: "none" });
+
+    // Complex Entrance GSAP Timeline
+    const tl = gsap.timeline();
+    tl.fromTo('.editorial-line-accent',
+      { scaleY: 0, transformOrigin: 'bottom' },
+      { scaleY: 1, duration: 1.5, ease: 'expo.inOut', delay: 0.2 }
+    );
+
+    tl.fromTo('.title-word',
+      { y: '120%', rotationZ: 5, filter: 'blur(5px)' },
+      { y: '0%', rotationZ: 0, filter: 'blur(0px)', duration: 1.8, ease: 'power4.out', stagger: 0.15 },
+      "-=0.8"
+    );
+
+    tl.fromTo('.editorial-subtitle',
+      { opacity: 0, y: 30, letterSpacing: '0em', filter: 'blur(10px)' },
+      { opacity: 1, y: 0, letterSpacing: '0.4em', filter: 'blur(0px)', duration: 2, ease: 'expo.out' },
+      "-=1.4"
+    );
+
+    // Decorators animation
+    tl.fromTo('.awwwards-decorator, .awwwards-frame', 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 1, stagger: 0.1 }, 
+      "-=1"
+    );
+
+    tl.fromTo('.title-frame-badge',
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 1, ease: 'back.out(1.7)' },
+      "-=0.5"
+    );
+
+    // Continuous subtle floating animation
+    gsap.to('.editorial-title', {
+      y: '-=15',
+      duration: 4,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 2
+    });
+  }, { dependencies: [ready], scope: sectionRef });
+
   useGSAP((context, contextSafe) => {
     // ── Override body/root to allow native scroll ──────────────────
     const body = document.body;
@@ -331,57 +381,32 @@ export default function SpriteExperience() {
         </div>
       )}
 
-      <div className="cinematic-curtain" ref={(el) => {
-        // Simple entrance effect for the curtain when ready
-        if (ready && el && !el.dataset.animated) {
-          el.dataset.animated = "true";
-          gsap.to(el, { opacity: 0, duration: 2, ease: "power2.inOut", pointerEvents: "none" });
-        }
-      }} />
+      <div className="cinematic-curtain" />
+
+      {/* Premium UI Decorators (Awwwards style) */}
+      {ready && (
+        <>
+          <div className="awwwards-frame"></div>
+          <div className="awwwards-decorator decorator-top-left">[ INDEX : 001 ]</div>
+          <div className="awwwards-decorator decorator-top-right">SYS.READY</div>
+          <div className="awwwards-decorator decorator-bottom-left">LAT 19.4326° N<br/>LON 99.1332° W</div>
+          <div className="awwwards-decorator decorator-bottom-right">EST. 2024</div>
+        </>
+      )}
 
       <div ref={scrubUIRef} className="hero-editorial-overlay" style={{ pointerEvents: 'none', willChange: 'opacity, filter, transform', opacity: ready ? 1 : 0, transition: 'opacity 0.5s ease-out', perspective: '1000px' }}>
-        <div ref={(el) => {
-          if (ready && el && !el.dataset.animated) {
-            el.dataset.animated = "true";
-
-            // Complex Entrance GSAP Timeline
-            const tl = gsap.timeline();
-            tl.fromTo('.editorial-line-accent',
-              { scaleY: 0, transformOrigin: 'bottom' },
-              { scaleY: 1, duration: 1.5, ease: 'expo.inOut', delay: 0.2 }
-            );
-
-            tl.fromTo('.title-word',
-              { y: '120%', rotationZ: 5, filter: 'blur(5px)' },
-              { y: '0%', rotationZ: 0, filter: 'blur(0px)', duration: 1.8, ease: 'power4.out', stagger: 0.15 },
-              "-=0.8"
-            );
-
-            tl.fromTo('.editorial-subtitle',
-              { opacity: 0, y: 30, letterSpacing: '0em', filter: 'blur(10px)' },
-              { opacity: 1, y: 0, letterSpacing: '0.4em', filter: 'blur(0px)', duration: 2, ease: 'expo.out' },
-              "-=1.4"
-            );
-
-            // Continuous subtle floating animation
-            gsap.to('.editorial-title', {
-              y: '-=15',
-              duration: 4,
-              ease: "sine.inOut",
-              yoyo: true,
-              repeat: -1,
-              delay: 2
-            });
-          }
-        }} style={{ willChange: 'opacity, transform, filter', transformStyle: 'preserve-3d' }}>
+        <div className="editorial-content-wrapper" style={{ willChange: 'opacity, transform, filter', transformStyle: 'preserve-3d' }}>
           <div ref={el => parallaxElementsRef.current[0] = el} className="editorial-line-accent"></div>
 
-          <h1 ref={el => parallaxElementsRef.current[1] = el} className="editorial-title">
-            <span className="title-line"><span className="title-word">FULL </span></span>
-            <span className="title-line"><span className="title-word">STACK</span></span>
-            <br />
-            <span className="title-line"><span className="title-word title-word-highlight">DEVELOPER</span></span>
-          </h1>
+          <div className="title-frame">
+            <div className="title-frame-badge">ROLE // 01</div>
+            <h1 ref={el => parallaxElementsRef.current[1] = el} className="editorial-title">
+              <span className="title-line"><span className="title-word">FULL </span></span>
+              <span className="title-line"><span className="title-word">STACK</span></span>
+              <br />
+              <span className="title-line"><span className="title-word title-word-highlight">DEVELOPER</span></span>
+            </h1>
+          </div>
 
           <p ref={el => parallaxElementsRef.current[2] = el} className="editorial-subtitle">BY UZIEL ISAAC — ARCHITECTURE &amp; CODE</p>
         </div>
