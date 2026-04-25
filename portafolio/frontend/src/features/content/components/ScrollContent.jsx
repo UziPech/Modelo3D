@@ -4,7 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import gsap from 'gsap';
 import './ScrollContent.css';
 
-export default function ScrollContent() {
+const ScrollContent = React.memo(function ScrollContent() {
     const scroll = useScroll();
 
     // Refs del Hero Original
@@ -38,6 +38,8 @@ export default function ScrollContent() {
     // Refs Imágenes Nuevas
     const davidStatueRef = useRef();
     const heartImageRef = useRef();
+    const footerImageRef = useRef();
+    const bottomBlurRef = useRef();
 
     // Animación inicial del Hero (sólo carga, no scroll)
     useLayoutEffect(() => {
@@ -187,6 +189,16 @@ export default function ScrollContent() {
                 }
             }
         }
+
+        // 6. FOOTER IMAGE Y BOTTOM BLUR (0.85 -> 1.00)
+        if (footerImageRef.current) {
+            const footerOp = offset > 0.85 ? (offset - 0.85) * 5 : 0;
+            footerImageRef.current.style.opacity = gsap.utils.clamp(0, 1, footerOp);
+        }
+        if (bottomBlurRef.current) {
+            const blurOp = offset > 0.9 ? 1 : 0;
+            bottomBlurRef.current.style.opacity = blurOp;
+        }
     });
 
     return (
@@ -248,28 +260,29 @@ export default function ScrollContent() {
                     </div>
 
                     {/* IMAGEN: Estatua de David (Entrando en parallax) */}
-                    <img ref={davidStatueRef} src="/assets/images/statua.png" alt="David Statue" className="editorial-statue" />
+                    <img ref={davidStatueRef} src="/assets/images/statua.png" alt="David Statue" className="editorial-statue" loading="lazy" decoding="async" />
 
                     {/* Decorative: Section number */}
                     <span className="editorial-section-number" aria-hidden="true">02</span>
 
                     {/* Layer 2: MAIN SOLID HEADLINE - Better composition */}
-                    <div ref={hookLine1Ref} style={{ willChange: 'transform' }}>
+                    <div ref={hookLine1Ref} style={{ willChange: 'transform', position: 'relative', zIndex: 2 }}>
                         <h2 className="editorial-headline">
-                            NO SOLO ESCRIBO<br />
+                            NO SOLO<br />
+                            ESCRIBO<br />
                             <span className="editorial-headline-accent">código.</span>
                         </h2>
                     </div>
 
                     {/* Layer 3: EDITORIAL SCRIPT OVERLAP */}
-                    <div ref={hookLine2Ref} className="editorial-script-wrapper" style={{ willChange: 'transform' }}>
+                    <div ref={hookLine2Ref} className="editorial-script-wrapper" style={{ willChange: 'transform', position: 'relative', zIndex: 3 }}>
                         <p className="editorial-script">
                             Construyo cosas que funcionan.
                         </p>
                     </div>
 
                     {/* Layer 4: CLOSURE with better readability */}
-                    <div ref={hookLine3Ref} className="editorial-closure-wrapper" style={{ willChange: 'transform' }}>
+                    <div ref={hookLine3Ref} className="editorial-closure-wrapper" style={{ willChange: 'transform', position: 'relative', zIndex: 2 }}>
                         <div className="editorial-closure-line"></div>
                         <p className="editorial-closure">
                             ... que duran y que importan.
@@ -294,12 +307,12 @@ export default function ScrollContent() {
 
                     {/* IMAGEN: Gato (Círculo / Calcomanía) */}
                     <div ref={catRef} className="manifesto-cat">
-                        <img src="/assets/images/remenberme.png" alt="Cat Drawing" />
+                        <img src="/assets/images/remenberme.png" alt="Cat Drawing" loading="lazy" decoding="async" />
                     </div>
 
                     {/* IMAGEN: Sello Awwwards (Cuadrado / Rotando) */}
-                    <div ref={awwwardsRef} className="awwwards-stamp">
-                        <img src="/assets/images/awwwrds_logo.png" alt="Awwwards Stamp" />
+                    <div ref={awwwardsRef} className="awwwards-stamp" style={{ willChange: 'transform' }}>
+                        <img src="/assets/images/awwwrds_logo.png" alt="Awwwards Stamp" loading="lazy" decoding="async" />
                     </div>
 
                     {/* Vertical Accent Label */}
@@ -402,7 +415,7 @@ export default function ScrollContent() {
                     }}
                 >
                     <span style={{ fontSize: '5vw', fontFamily: 'var(--font-uziel)', fontWeight: '900', color: '#000', lineHeight: 1 }}>I</span>
-                    <img ref={heartImageRef} src="/assets/images/Corazon.png" alt="Black Heart" className="heart-image" />
+                    <img ref={heartImageRef} src="/assets/images/Corazon.png" alt="Black Heart" className="heart-image" loading="lazy" decoding="async" />
                     <span style={{ fontSize: '5vw', fontFamily: 'var(--font-pech)', fontWeight: '900', color: '#000', letterSpacing: '-0.05em', lineHeight: 1 }}>DESIGN</span>
                 </div>
             </div>
@@ -418,14 +431,19 @@ export default function ScrollContent() {
 
             {/* Imagen Pura de Fondo final (aparece al 85%) */}
             <img
+                ref={footerImageRef}
                 src="/assets/fondos/paisaje.png"
                 alt="Paisaje final"
                 className="footer-image"
-                style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', pointerEvents: 'none', opacity: scroll.offset > 0.85 ? (scroll.offset - 0.85) * 5 : 0 }}
+                style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', pointerEvents: 'none', opacity: 0, willChange: 'opacity' }}
+                loading="lazy"
+                decoding="async"
             />
 
-            <div className="bottom-blur" style={{ opacity: scroll.offset > 0.9 ? 1 : 0, position: 'absolute', bottom: 0, height: '40vh', width: '100%' }}></div>
+            <div ref={bottomBlurRef} className="bottom-blur" style={{ opacity: 0, position: 'absolute', bottom: 0, height: '40vh', width: '100%', willChange: 'opacity' }}></div>
 
         </div>
     );
-}
+});
+
+export default ScrollContent;
